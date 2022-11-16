@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh sách người dùng</title>
+</head>
+<body>
+<div align="center">
+  <h1>Danh sách người dùng</h1>
+  <h3>Add a new Employee <a href="/employees/add/">here</a></h3>
+  <table border="1" cellpadding="10">
+    <thead>
+    <tr>
+      <th>STT</th>
+      <th>Ten tai khoan</th>
+      <th>Vai tro</th>
+      <th>Trang thai</th>
+      <th>Thoi gian tao</th>
+      <th>Thoi gian cap nhat</th>
+      <th colspan="2">Chuc nang</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="account, iStat:${accountList}">
+      <td th:text="${iStat.count}">1</td>
+      <td th:text="${account.getUsername()}">1</td>
+      <td th:text="${account.getRole()}">1</td>
+      <td th:text="${account.isActive()}">1</td>
+      <td th:text="${account.getCreatedAt()}">1</td>
+      <td th:text="${account.getUpdateAt()}">1</td>
+
+      <td>
+        <a th:href="@{'/employees/edit/' + ${account.id}}">Edit</a>
+        <a th:href="@{'/employees/delete/' + ${account.id}}" >Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
