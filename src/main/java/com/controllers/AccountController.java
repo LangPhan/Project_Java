@@ -68,12 +68,12 @@ public class AccountController {
 
     @GetMapping("/login")
     public String getLogin(Model model){
-        Account user = new Account();
-        model.addAttribute("user", user);
+        Account account = new Account();
+        model.addAttribute("account", account);
         return "users/login";
     }
     @PostMapping("/login")
-    public String postsLogin(@ModelAttribute(name = "user") Account account, Model model,
+    public String postsLogin(@ModelAttribute(name = "account") Account account, Model model,
                              HttpServletResponse response){
         Optional<Account> findUser = accountRepository.findByUsername(account.getUsername());
         if(findUser.isEmpty()){
