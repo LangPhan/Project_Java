@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/user/login", "/user/logout","/user/register").permitAll();
+        http.authorizeRequests().antMatchers("/user/login", "/user/logout","/user/register","/js/**", "/css/**").permitAll();
         http.authorizeRequests().antMatchers("/user/admin/**").access("hasAuthority('ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER");
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/user/404");
@@ -39,7 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureForwardUrl("/user/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .and().logout().logoutUrl("/user/logout").logoutSuccessUrl("/user/login");
+                .and().logout().logoutUrl("/user/logout").logoutSuccessUrl("/user/login").deleteCookies()
+                .and().rememberMe().tokenValiditySeconds(7 * 24 * 60 * 60).key("this_is_key");
     }
 
     @Bean

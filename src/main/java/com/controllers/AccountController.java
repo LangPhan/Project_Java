@@ -13,7 +13,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -24,14 +23,14 @@ public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
 
-    private List<String> getRolesByLoggedUser(Principal principal){
+    /*private List<String> getRolesByLoggedUser(Principal principal){
         String roles = getLoggedUser(principal).getRole();
         List<String> assignRoles = Arrays.stream(roles.split(",")).toList();
         if(assignRoles.contains("ROLE_ADMIN")){
             return Arrays.stream(UserConstant.ADMIN_ACCESS).collect(Collectors.toList());
         }
         return Collections.emptyList();
-    }
+    }*/
 
     private Account getLoggedUser(Principal principal){
         return accountRepository.findByUsername(principal.getName()).get();
@@ -47,13 +46,23 @@ public class AccountController {
     @PostMapping("/register")
     public String postRegister(@ModelAttribute("account") Account account, Model model,
                                @RequestParam(name = "repassword" ) String repass){
+        if(account.getUsername().length() < 6){
+            message = "Tên đăng nhập tối thiểu có 6 kí tự";
+            model.addAttribute("message",message);
+            return "users/register";
+        }
+        if(account.getPassword().length() < 8){
+            message = "Mật tối thiểu có 8 kí tự";
+            model.addAttribute("message",message);
+            return "users/register";
+        }
         if(!Objects.equals(account.getPassword(), repass)){
-            message = "Password doesn't match with re-password";
+            message = "Mật khẩu không khớp";
             model.addAttribute("message",message);
             return "users/register";
         }
         if(accountRepository.findByUsername(account.getUsername()).isPresent()){
-            message = "Username is exist! Please using another username";
+            message = "Tên tài khoản đã tồn tại! Vui lòng sử dụng tên khác";
             model.addAttribute("message",message);
             return "users/register";
         }
@@ -61,7 +70,7 @@ public class AccountController {
         String encryptedPwd = passwordEncoder.encode(account.getPassword());
         account.setPassword(encryptedPwd);
         accountRepository.save(account);
-        String notify = "Register Successfully";
+        String notify = "Đăng kí tài khoản thành công";
         model.addAttribute("notify", notify);
         return "users/login";
     }
@@ -74,7 +83,8 @@ public class AccountController {
     }
     @PostMapping("/login")
     public String postsLogin(@ModelAttribute(name = "account") Account account, Model model,
-                             HttpServletResponse response){
+                             HttpServletResponse response,
+                             @RequestParam(value = "remember-me", defaultValue = "") String remember){
         Optional<Account> findUser = accountRepository.findByUsername(account.getUsername());
         if(findUser.isEmpty()){
             message = "Username or password was wrong";

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editing</title>
+</head>
+<body>
+<div align="center">
+    <h1>Edit Employee</h1>
+    <br/>
+    <form action="#" th:action="@{'/admin/userlist/edit/' + ${id}}" th:object="${user}"
+          method="post">
+        <table border="0" cellpadding="10">
+            <tr>
+                <td>Vai trò:</td>
+                <td>
+                    <label for="roles">Chọn vai trò:</label>
+                    <select id="roles" th:field="*{role}">
+                        <option th:if="${user.role == 'ROLE_USER'}"  th:value="'ROLE_USER'" th:text="USER" selected></option>
+                        <option th:if="${user.role == 'ROLE_ADMIN'}" th:value="'ROLE_ADMIN'" th:text="ADMIN" selected></option>
+                        <option th:if="${user.role == 'ROLE_EMPLOYEE'}" th:value="'ROLE_EMPLOYEE'" th:text="EMPOYEE" selected></option>
+                        <option th:if="${user.role != 'ROLE_ADMIN'}" th:value="'ROLE_ADMIN'" th:text="ADMIN"></option>
+                        <option th:if="${user.role != 'ROLE_USER'}" th:value="'ROLE_USER'" th:text="USER"></option>
+                        <option th:if="${user.role != 'ROLE_EMPLOYEE'}" th:value="'ROLE_EMPLOYEE'" th:text="EMPLOYEE"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Chọn trạng thái:</td>
+                <td>
+                    <label for="status">Chọn trạng trái:</label>
+                    <select id="status" th:field="*{active}">
+                        <option th:if="${user.active == true}" th:value="true" th:text="Active" selected></option>
+                        <option th:if="${user.active == false}" th:value="false" th:text="Unactive" selected></option>
+                        <option th:if="${user.active != true}" th:value="true" th:text="Active"></option>
+                        <option th:if="${user.active != false}" th:value="false" th:text="Unactive"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Save</button> </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
