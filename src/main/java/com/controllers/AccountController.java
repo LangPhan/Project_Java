@@ -76,9 +76,13 @@ public class AccountController {
     }
 
     @GetMapping("/login")
-    public String getLogin(Model model){
+    public String getLogin(Model model,
+                           @CookieValue(name = "pass", defaultValue = "") String pass,
+                           @CookieValue(name = "username", defaultValue = "") String username){
         Account account = new Account();
         model.addAttribute("account", account);
+        model.addAttribute("user", username);
+        model.addAttribute("pass", pass);
         return "users/login";
     }
     @PostMapping("/login")
@@ -96,6 +100,12 @@ public class AccountController {
                 userCookie.setMaxAge(60*60*24);
                 userCookie.setPath("/");
                 response.addCookie(userCookie);
+                if(remember.equals("on")){
+                    Cookie pass = new Cookie("pass", account.getPassword());
+                    pass.setMaxAge(60*60*24);
+                    pass.setPath("/user/login");
+                    response.addCookie(pass);
+                }
                 return "redirect:/user/";
             }else{
                 message = "Username or password was wrong";
