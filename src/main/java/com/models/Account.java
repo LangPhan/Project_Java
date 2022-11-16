@@ -1,0 +1,89 @@
+package com.models;
+
+import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+@Entity
+public class Account {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(name = "USER_NAME", nullable = false)
+    private String username;
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
+    @Column(name = "ROLE", nullable = false)
+    private String role;
+    @Column(name = "IS_ACTIVE", nullable = false)
+    private boolean isActive;
+    @Column(name = "CREATED_AT", nullable = false)
+    private String createdAt;
+    @Column(name = "UPDATED_AT", nullable = false)
+    private String updateAt;
+
+    public Account() {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        this.isActive= true;
+        this.createdAt = dateFormat.format(date);
+        this.updateAt = dateFormat.format(date);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(String updateAt) {
+        this.updateAt = updateAt;
+    }
+}
