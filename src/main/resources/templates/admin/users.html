@@ -31,8 +31,8 @@
       <td th:text="${account.getUpdateAt()}">1</td>
 
       <td>
-        <a th:href="@{'/employees/edit/' + ${account.id}}">Edit</a>
-        <a th:href="@{'/employees/delete/' + ${account.id}}" >Delete</a>
+        <a th:href="@{'/admin/userlist/edit/' + ${account.id}}">Edit</a>
+        <a th:href="@{'/admin/userlist/delete/' + ${account.id}}" >Delete</a>
       </td>
     </tr>
     </tbody>
