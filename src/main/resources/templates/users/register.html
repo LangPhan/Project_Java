@@ -28,8 +28,13 @@
               <label for="repassword">Nhập lại mật khẩu:</label>
               <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" id="repassword" name="repassword">
           </div>
-          <br>
+          <div class="form-group">
+              <p>Bạn đã có tài khoản?<a href="/user/login">  Đăng nhập</a></p>
+          </div>
           <button type="submit" class="btn btn-primary">Đăng kí</button>
+          <br>
+
+          <br>
           <div th:if ="${message}" class="alert alert-danger" role="alert" >
               <p th:text="${message}"></p>
           </div>
