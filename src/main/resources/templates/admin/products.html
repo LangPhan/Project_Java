@@ -3,41 +3,86 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách sản phẩm</title>
+    <title>Danh sách người dùng</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav pl-2">
+        <li class="nav-brand active">
+            <a class="nav-link" href="/admin/">Admin</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/userlist">Người dùng</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/product">Sản phẩm</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/category">Phân loại sản phẩm</a>
+        </li>
+    </ul>
+</nav>
 <div align="center">
-    <h1>Danh sách sản phẩm</h1>
-    <h3>Thêm sản phẩm <a href="/admin/newproduct/">here</a></h3>
-    <table border="1" cellpadding="10">
-        <thead>
-        <tr>
-            <th>ID sản phẩm</th>
-            <th>Tên sản phẩm</th>
-            <th>Giá</th>
-            <th>Mô tả</th>
-            <th>Thời gian tạo</th>
-            <th>Thời gian cập nhật</th>
-            <th>Phân loại</th>
-            <th colspan="2">Chuc nang</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="account, iStat:${accountList}">
-            <td th:text="${iStat.count}">1</td>
-            <td th:text="${account.getUsername()}">1</td>
-            <td th:text="${account.getRole()}">1</td>
-            <td th:text="${account.isActive()}">1</td>
-            <td th:text="${account.getCreatedAt()}">1</td>
-            <td th:text="${account.getUpdateAt()}">1</td>
-
-            <td>
-                <a th:href="@{'/admin/products/edit/' + ${account.id}}">Edit</a>
-                <a th:href="@{'/admin/products/delete/' + ${account.id}}" >Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <h1>Danh sách sản phẩm</h1>
+        <table class="table" style="width: 80%">
+            <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Tên sản phẩm</th>
+                <th scope="col">Ảnh</th>
+                <th scope="col">Thời gian tạo</th>
+                <th scope="col">Thời gian cập nhật</th>
+                <th colspan="2">Chức năng</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product, iStat:${products}">
+                <th scope="row" th:text="${iStat.count}">1</th>
+                <td th:text="${product.getName()}">1</td>
+                <td th:text="${product.getImg()}">1</td>
+                <td th:text="${product.getCreatedAt()}">1</td>
+                <td th:text="${product.getUpdateAt()}">1</td>
+                <td>
+                    <button type="button" class="btn btn-success"><a th:href="@{'/admin/product/edit/' + ${product.id}}">Chỉnh sửa</a></button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#accountModel'+${product.id}" ><a>Xóa</a></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 </div>
+    <!-- Modal -->
+    <div class="modal fade" th:each="product:${products}" th:attr="id='accountModel'+${product.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xác nhận</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có muốn xóa sản phẩm <b th:text="${product.name}"></b></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <form method="post" th:action="'/admin/userlist/delete/' + ${product.id}">
+                        <button type="submit" class="btn btn-danger" data-toggle="modal">Xóa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
+<style>
+    .btn a{
+        text-decoration: none;
+        color: white;
+    }
+
+</style>
 </html>

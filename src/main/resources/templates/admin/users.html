@@ -4,39 +4,86 @@
 <head>
   <meta charset="UTF-8">
   <title>Danh sách người dùng</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav pl-2">
+      <li class="nav-brand active">
+        <a class="nav-link" href="/admin/">ADMIN</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/userlist">Người dùng</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/product">Sản phẩm</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/category">Phân loại sản phẩm</a>
+      </li>
+    </ul>
+  </nav>
 <div align="center">
   <h1>Danh sách người dùng</h1>
-  <h3>Add a new Employee <a href="/employees/add/">here</a></h3>
-  <table border="1" cellpadding="10">
+  <table class="table" style="width: 80%">
     <thead>
     <tr>
-      <th>STT</th>
-      <th>Ten tai khoan</th>
-      <th>Vai tro</th>
-      <th>Trang thai</th>
-      <th>Thoi gian tao</th>
-      <th>Thoi gian cap nhat</th>
-      <th colspan="2">Chuc nang</th>
+      <th scope="col">STT</th>
+      <th scope="col">Tên tài khoản</th>
+      <th scope="col">Vai trò</th>
+      <th scope="col">Trạng thái</th>
+      <th scope="col">Thời gian tạo</th>
+      <th scope="col">Thời gian cập nhật</th>
+      <th colspan="2">Chức năng</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="account, iStat:${accountList}">
-      <td th:text="${iStat.count}">1</td>
+      <th scope="row" th:text="${iStat.count}">1</th>
       <td th:text="${account.getUsername()}">1</td>
       <td th:text="${account.getRole()}">1</td>
       <td th:text="${account.isActive()}">1</td>
       <td th:text="${account.getCreatedAt()}">1</td>
       <td th:text="${account.getUpdateAt()}">1</td>
-
       <td>
-        <a th:href="@{'/admin/userlist/edit/' + ${account.id}}">Edit</a>
-        <a th:href="@{'/admin/userlist/delete/' + ${account.id}}" >Delete</a>
+        <button type="button" class="btn btn-success"><a th:href="@{'/admin/userlist/edit/' + ${account.id}}">Chỉnh sửa</a></button>
+        <button type="button" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#accountModel'+${account.id}" ><a>Xóa</a></button>
       </td>
     </tr>
     </tbody>
   </table>
 </div>
+  <!-- Modal -->
+  <div class="modal fade" th:each="account:${accountList}" th:attr="id='accountModel'+${account.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Xác nhận</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có muốn xóa người dùng <b th:text="${account.username}"></b></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          <form method="post" th:action="'/admin/userlist/delete/' + ${account.id}">
+            <button type="submit" class="btn btn-danger" data-toggle="modal">Xóa</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
+<style>
+  .btn a{
+    text-decoration: none;
+    color: white;
+  }
+</style>
 </html>

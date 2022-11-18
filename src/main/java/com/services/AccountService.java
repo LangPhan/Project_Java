@@ -29,10 +29,8 @@ public class AccountService {
     public Account save(Account account){
         return accountRepository.save(account);
     }
-    public Account update(Account account, String username, String role, boolean isActive){
-        account.setUsername(username);
-        account.setActive(isActive);
-        account.setRole(role);
-        return accountRepository.save(account);
+
+    public void deleteAccount(long id){
+        accountRepository.deleteById(id);
     }
 }

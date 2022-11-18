@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class Category {
@@ -19,8 +20,8 @@ public class Category {
     private String updateAt;
 
 
-    @OneToOne(mappedBy = "category")
-    private Product product;
+    @OneToMany(mappedBy = "category")
+    private Set<Product> product;
 
     public Category() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -29,12 +30,12 @@ public class Category {
         this.updateAt = dateFormat.format(date);
     }
 
-    public Product getProduct() {
+    public Set<Product> getProduct() {
         return product;
     }
 
 
-    public void setProduct(Product product) {
+    public void setProduct(Set<Product> product) {
         this.product = product;
     }
 
@@ -69,9 +70,6 @@ public class Category {
     public void setUpdateAt(String updateAt) {
         this.updateAt = updateAt;
     }
-
-
-
 
 
 }

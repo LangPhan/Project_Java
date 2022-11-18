@@ -21,7 +21,7 @@ public class Product {
     @Column(name = "UPDATED_AT", nullable = false)
     private String updateAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CATEGORY_ID",referencedColumnName = "id")
     private Category category;
 
@@ -90,5 +90,12 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public void getPrice(Price price) {
+    }
+
+    public void setPrice(Price price) {
+        this.price = price;
     }
 }

@@ -1,8 +1,14 @@
 package com.controllers;
 
 import com.models.Account;
+import com.models.Category;
+import com.models.Price;
+import com.models.Product;
 import com.repositories.AccountRepository;
 import com.services.AccountService;
+import com.services.CategoryService;
+import com.services.PriceService;
+import com.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,18 +30,19 @@ public class AdminController {
     private AccountRepository accountRepository;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private PriceService priceService;
     private Account getLoggedUser(Principal principal){
         return accountRepository.findByUsername(principal.getName()).get();
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public String getAdmin(Model model){
         return "admin/index";
-    }
-
-    @GetMapping("/category")
-    public String getCategory(Model model){
-        return "admin/category";
     }
 
     @GetMapping("/userlist")
@@ -65,5 +72,69 @@ public class AdminController {
             accountService.save(accountSaved.get());
         }
         return "redirect:/admin/userlist";
+    }
+    @PostMapping("/userlist/delete/{id}")
+    public String postingDelete(@PathVariable("id") Long id, Model model){
+        String message = "";
+        model.addAttribute("message",message);
+        accountService.deleteAccount(id);
+        return "admin/users";
+    }
+
+    @GetMapping("/category")
+    public String getCategory(Model model){
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+        return "admin/category";
+    }
+    @PostMapping("/category")
+    public String addCategory(@ModelAttribute("category") Category category, Model model){
+        categoryService.saveCategory(category);
+        return "redirect:/admin/category";
+    }
+    @GetMapping("product")
+    public String gettingProduct(Model model){
+        List<Product> products = productService.findAllProduct();
+        model.addAttribute("products", products);
+        return "admin/products";
+    }
+    @GetMapping("products/add")
+    public String gettingAddProduct(Model model){
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+        return "admin/add-product";
+    }
+    @PostMapping("products/add")
+    public String postingAddProduct(@ModelAttribute("product")Product product,
+                                    @RequestParam(name = "priceS") Double priceS,
+                                    @RequestParam(name = "priceM") Double priceM,
+                                    @RequestParam(name = "priceL") Double priceL){
+        Price price = new Price(priceS,priceL,priceM);
+        priceService.savePrice(price);
+        product.setPrice(price);
+        productService.saveProduct(product);
+        return "admin/add-product";
+    }
+    @GetMapping("product/edit/{id}")
+    public String gettingEditProduct(@PathVariable("id") Long id, Model model){
+        Optional<Product> product = productService.findProductById(id);
+        model.addAttribute("product", product);
+        model.addAttribute("category_id", categoryService.getCategoryById(id));
+        model.addAttribute("price", priceService.findPriceById(id));
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "admin/edit-product";
+    }
+    @PostMapping("product/edit/{id}")
+    public String postingEditProduct(@ModelAttribute(name = "product") Product product,
+                                     @RequestParam(name = "priceS") Double priceS,
+                                     @RequestParam(name = "priceM") Double priceM,
+                                     @RequestParam(name = "priceL") Double priceL){
+        Optional<Price> price = priceService.findPriceById(product.getId());
+        price.get().setSizeS(priceS);
+        price.get().setSizeM(priceM);
+        price.get().setSizeL(priceL);
+        product.setPrice(price.get());
+        productService.saveProduct(product);
+       return "admin/products";
     }
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editing</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav pl-2">
+        <li class="nav-brand active">
+            <a class="nav-link" href="/admin/">ADMIN</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/userlist">Người dùng</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/product">Sản phẩm</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/category">Phân loại sản phẩm</a>
+        </li>
+    </ul>
+</nav>
+<div class="container">
+    <h2>Thêm sản phẩm</h2>
+    <form action="admin/products/add" th:action="${'/admin/products/add'}" method="post" th:object="${product}">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Tên sản phẩm</label>
+                <input name = "name" type="text" class="form-control" id="inputEmail4"  placeholder="Nhập tên sản phẩm">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputPriceS">Giá sizeS</label>
+                <input name="priceS" type="number" class="form-control" id="inputPriceS">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputPriceM">Giá sizeS</label>
+                <input name="priceM" type="number" class="form-control" id="inputPriceM">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputPriceL">Giá sizeS</label>
+                <input name="priceL" type="number" class="form-control" id="inputPriceL">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Mô tả</label>
+            <input name="description" type="text" class="form-control"  id="description" placeholder="Nhập mô tả sản phẩm">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputState">Loại sản phẩm</label>
+                <select name="category" id="inputState" class="form-control">
+                    <option th:each="category:${categories}" th:text="${category.getName()}" th:value="${category.getId()}">Choose</option>
+                </select>
+            </div>
+        </div>
+        <label>Ảnh sản phẩm</label>
+        <div class="form-group">
+            <div class="form-group col-md-4">
+                <input type="file" class="custom-file-input" id="customFile" name="img">
+                <label class="custom-file-label" for="customFile">Choose file</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+    </form>
+</div>
+</body>
+<script>
+    $(".custom-file-input").on("change", function() {
+        const fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
+</html>
