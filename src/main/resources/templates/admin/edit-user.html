@@ -15,7 +15,7 @@
             <a class="nav-link" href="/admin/">ADMIN</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/userlist">Người dùng</a>
+            <a class="nav-link" href="/admin/user">Người dùng</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/admin/product">Sản phẩm</a>
@@ -29,7 +29,7 @@
     <h3 style="margin-bottom: 10px">
         Chỉnh sửa người dùng
     </h3>
-    <form action="#" th:action="@{'/admin/userlist/edit/' + ${id}}" th:object="${user}"
+    <form action="#" th:action="@{'/admin/user/edit/' + ${id}}" th:object="${user}"
           method="post">
         <table border="0px" cellpadding="10">
             <tr>

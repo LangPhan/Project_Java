@@ -16,7 +16,7 @@
         <a class="nav-link" href="/admin/">ADMIN</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/admin/userlist">Người dùng</a>
+        <a class="nav-link" href="/admin/user">Người dùng</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/admin/product">Sản phẩm</a>
@@ -49,8 +49,7 @@
       <td th:text="${account.getCreatedAt()}">1</td>
       <td th:text="${account.getUpdateAt()}">1</td>
       <td>
-        <button type="button" class="btn btn-success"><a th:href="@{'/admin/userlist/edit/' + ${account.id}}">Chỉnh sửa</a></button>
-        <button type="button" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#accountModel'+${account.id}" ><a>Xóa</a></button>
+        <button type="button" class="btn btn-success"><a th:href="@{'/admin/user/edit/' + ${account.id}}">Chỉnh sửa</a></button>
       </td>
     </tr>
     </tbody>
@@ -71,7 +70,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-          <form method="post" th:action="'/admin/userlist/delete/' + ${account.id}">
+          <form method="post" th:action="'/admin/user/delete/' + ${account.id}">
             <button type="submit" class="btn btn-danger" data-toggle="modal">Xóa</button>
           </form>
         </div>

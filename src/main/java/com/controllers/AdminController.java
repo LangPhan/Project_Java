@@ -39,27 +39,28 @@ public class AdminController {
     private Account getLoggedUser(Principal principal){
         return accountRepository.findByUsername(principal.getName()).get();
     }
-
+    //Index ADMIN
     @GetMapping("")
-    public String getAdmin(Model model){
+    public String getAdmin(){
         return "admin/index";
     }
 
-    @GetMapping("/userlist")
+    // USER MANAGEMENT
+    @GetMapping("/user")
     public String getUsers(Model model){
         List<Account> accounts = accountService.findAllAccount();
         model.addAttribute("accountList",accounts);
         return "admin/users";
     }
 
-    @GetMapping("/userlist/edit/{id}")
+    @GetMapping("/user/edit/{id}")
     public ModelAndView gettingEdit(@PathVariable(name= "id") int id){
         ModelAndView mav = new ModelAndView("admin/edit-user");
         Optional<Account> user = accountService.findAccountById(id);
         user.ifPresent(account -> mav.addObject("user", account));
         return mav;
     }
-   @PostMapping("/userlist/edit/{id}")
+   @PostMapping("/user/edit/{id}")
    public String postingEdit(@ModelAttribute("user") Account account,
                              @PathVariable("id") Long id){
         Optional<Account> accountSaved = accountService.findAccountById(id);
@@ -71,9 +72,9 @@ public class AdminController {
             accountSaved.get().setUpdateAt(dateFormat.format(date));
             accountService.save(accountSaved.get());
         }
-        return "redirect:/admin/userlist";
+        return "redirect:/admin/user";
     }
-    @PostMapping("/userlist/delete/{id}")
+    @PostMapping("/user/delete/{id}")
     public String postingDelete(@PathVariable("id") Long id, Model model){
         String message = "";
         model.addAttribute("message",message);
@@ -81,35 +82,40 @@ public class AdminController {
         return "admin/users";
     }
 
+
+    //CATEGORY MANAGEMENT
     @GetMapping("/category")
     public String getCategory(Model model){
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
         return "admin/category";
     }
+
     @PostMapping("/category")
     public String addCategory(@ModelAttribute("category") Category category, Model model){
         categoryService.saveCategory(category);
         return "redirect:/admin/category";
     }
+
+    //PRODUCT MANAGEMENT
     @GetMapping("product")
     public String gettingProduct(Model model){
         List<Product> products = productService.findAllProduct();
         model.addAttribute("products", products);
         return "admin/products";
     }
-    @GetMapping("products/add")
+    @GetMapping("product/add")
     public String gettingAddProduct(Model model){
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
         return "admin/add-product";
     }
-    @PostMapping("products/add")
+    @PostMapping("product/add")
     public String postingAddProduct(@ModelAttribute("product")Product product,
                                     @RequestParam(name = "priceS") Double priceS,
                                     @RequestParam(name = "priceM") Double priceM,
                                     @RequestParam(name = "priceL") Double priceL){
-        Price price = new Price(priceS,priceL,priceM);
+        Price price = new Price(priceS,priceM,priceL);
         priceService.savePrice(price);
         product.setPrice(price);
         productService.saveProduct(product);
@@ -119,8 +125,8 @@ public class AdminController {
     public String gettingEditProduct(@PathVariable("id") Long id, Model model){
         Optional<Product> product = productService.findProductById(id);
         model.addAttribute("product", product);
-        model.addAttribute("category_id", categoryService.getCategoryById(id));
-        model.addAttribute("price", priceService.findPriceById(id));
+        model.addAttribute("category_id", categoryService.getCategoryById(product.get().getCategory().getId()));
+        model.addAttribute("price", priceService.findPriceById(product.get().getPrice().getId()));
         model.addAttribute("categories", categoryService.getAllCategories());
         return "admin/edit-product";
     }
@@ -128,13 +134,17 @@ public class AdminController {
     public String postingEditProduct(@ModelAttribute(name = "product") Product product,
                                      @RequestParam(name = "priceS") Double priceS,
                                      @RequestParam(name = "priceM") Double priceM,
-                                     @RequestParam(name = "priceL") Double priceL){
-        Optional<Price> price = priceService.findPriceById(product.getId());
-        price.get().setSizeS(priceS);
-        price.get().setSizeM(priceM);
-        price.get().setSizeL(priceL);
-        product.setPrice(price.get());
+                                     @RequestParam(name = "priceL") Double priceL
+                                     ){
+        Long idPrice = productService.findProductById(product.getId()).get().getPrice().getId();
+        Optional<Price> price = priceService.findPriceById(idPrice);
+        if(price.isPresent()){
+            price.get().setSizeS(priceS);
+            price.get().setSizeM(priceM);
+            price.get().setSizeL(priceL);
+            product.setPrice(price.get());
+        }
         productService.saveProduct(product);
-       return "admin/products";
+       return "redirect:/admin/product";
     }
 }

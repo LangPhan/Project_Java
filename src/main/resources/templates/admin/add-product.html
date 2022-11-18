@@ -15,7 +15,7 @@
             <a class="nav-link" href="/admin/">ADMIN</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/userlist">Người dùng</a>
+            <a class="nav-link" href="/admin/user">Người dùng</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/admin/product">Sản phẩm</a>
@@ -27,7 +27,7 @@
 </nav>
 <div class="container">
     <h2>Thêm sản phẩm</h2>
-    <form action="admin/products/add" th:action="${'/admin/products/add'}" method="post" th:object="${product}">
+    <form action="admin/products/add" th:action="${'/admin/product/add'}" method="post" th:object="${product}">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputEmail4">Tên sản phẩm</label>

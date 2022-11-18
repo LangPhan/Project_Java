@@ -15,7 +15,7 @@
       <a class="nav-link" href="/admin/">ADMIN</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/admin/userlist">Người dùng</a>
+      <a class="nav-link" href="/admin/user">Người dùng</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="/admin/product">Sản phẩm</a>
@@ -38,11 +38,11 @@
         <input name="priceS" type="number" class="form-control" id="inputPriceS" th:value="${price.get().sizeS}">
       </div>
       <div class="form-group col-md-2">
-        <label for="inputPriceM">Giá sizeS</label>
+        <label for="inputPriceM">Giá sizeM</label>
         <input name="priceM" type="number" class="form-control" id="inputPriceM" th:value="${price.get().sizeM}">
       </div>
       <div class="form-group col-md-2">
-        <label for="inputPriceL">Giá sizeS</label>
+        <label for="inputPriceL">Giá sizeL</label>
         <input name="priceL" type="number" class="form-control" id="inputPriceL" th:value="${price.get().sizeL}">
       </div>
     </div>
@@ -66,7 +66,7 @@
         <label class="custom-file-label" for="customFile">Choose file</label>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+    <button type="submit" class="btn btn-primary">Sửa</button>
   </form>
 </div>
 </body>

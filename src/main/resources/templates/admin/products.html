@@ -16,7 +16,7 @@
             <a class="nav-link" href="/admin/">Admin</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/userlist">Người dùng</a>
+            <a class="nav-link" href="/admin/user">Người dùng</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/admin/product">Sản phẩm</a>
@@ -28,6 +28,7 @@
 </nav>
 <div align="center">
         <h1>Danh sách sản phẩm</h1>
+        <h4>Thêm sản phẩm mới <a href="/admin/product/add">tại đây</a></h4>
         <table class="table" style="width: 80%">
             <thead>
             <tr>
@@ -69,7 +70,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <form method="post" th:action="'/admin/userlist/delete/' + ${product.id}">
+                    <form method="post" th:action="'/admin/product/delete/' + ${product.id}">
                         <button type="submit" class="btn btn-danger" data-toggle="modal">Xóa</button>
                     </form>
                 </div>

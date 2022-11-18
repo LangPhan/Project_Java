@@ -92,7 +92,8 @@ public class Product {
         this.category = category;
     }
 
-    public void getPrice(Price price) {
+    public Price getPrice() {
+        return this.price;
     }
 
     public void setPrice(Price price) {
