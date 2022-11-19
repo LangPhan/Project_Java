@@ -27,7 +27,7 @@
 </nav>
 <div class="container">
     <h2>Thêm sản phẩm</h2>
-    <form action="admin/products/add" th:action="${'/admin/product/add'}" method="post" th:object="${product}">
+    <form action="admin/products/add" th:action="${'/admin/product/add'}" method="post" th:object="${product}" enctype="multipart/form-data">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputEmail4">Tên sản phẩm</label>
@@ -38,11 +38,11 @@
                 <input name="priceS" type="number" class="form-control" id="inputPriceS">
             </div>
             <div class="form-group col-md-2">
-                <label for="inputPriceM">Giá sizeS</label>
+                <label for="inputPriceM">Giá sizeM</label>
                 <input name="priceM" type="number" class="form-control" id="inputPriceM">
             </div>
             <div class="form-group col-md-2">
-                <label for="inputPriceL">Giá sizeS</label>
+                <label for="inputPriceL">Giá sizeL</label>
                 <input name="priceL" type="number" class="form-control" id="inputPriceL">
             </div>
         </div>
@@ -54,14 +54,15 @@
             <div class="form-group col-md-4">
                 <label for="inputState">Loại sản phẩm</label>
                 <select name="category" id="inputState" class="form-control">
-                    <option th:each="category:${categories}" th:text="${category.getName()}" th:value="${category.getId()}">Choose</option>
+                    <option th:each="category:${categories}" th:text="${category.getName()}" th:value="${category.getId()}"
+                    >Choose</option>
                 </select>
             </div>
         </div>
         <label>Ảnh sản phẩm</label>
         <div class="form-group">
             <div class="form-group col-md-4">
-                <input type="file" class="custom-file-input" id="customFile" name="img">
+                <input type="file" class="custom-file-input" id="customFile" name="image" accept="image/png, image/jpeg">
                 <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
         </div>
@@ -74,5 +75,6 @@
         const fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
+
 </script>
 </html>

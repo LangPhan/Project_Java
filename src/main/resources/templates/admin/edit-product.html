@@ -26,48 +26,54 @@
   </ul>
 </nav>
 <div class="container">
-  <h2>Thêm sản phẩm</h2>
-  <form th:action="@{'/admin/product/edit/' + ${product.get().id}}" method="post" th:object="${product}">
+  <h2 th:hidden="${detail}">Chỉnh sửa sản phẩm</h2>
+  <h2 th:hidden="!${detail}">Chi tiết sản phẩm</h2>
+  <form th:action="@{'/admin/product/edit/' + ${product.get().id}}" method="post" th:object="${product}" enctype="multipart/form-data">
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Tên sản phẩm</label>
-        <input name = "name" type="text" class="form-control" id="inputEmail4"  placeholder="Nhập tên sản phẩm" th:value="${product.get().name}">
+        <input name = "name" type="text" class="form-control" id="inputEmail4"  placeholder="Nhập tên sản phẩm" th:value="${product.get().name}"
+               th:disabled="${detail}"
+        >
       </div>
       <div class="form-group col-md-2">
         <label for="inputPriceS">Giá sizeS</label>
-        <input name="priceS" type="number" class="form-control" id="inputPriceS" th:value="${price.get().sizeS}">
+        <input name="priceS" type="number" class="form-control" id="inputPriceS" th:value="${price.get().sizeS}" th:disabled="${detail}">
       </div>
       <div class="form-group col-md-2">
         <label for="inputPriceM">Giá sizeM</label>
-        <input name="priceM" type="number" class="form-control" id="inputPriceM" th:value="${price.get().sizeM}">
+        <input name="priceM" type="number" class="form-control" id="inputPriceM" th:value="${price.get().sizeM}" th:disabled="${detail}">
       </div>
       <div class="form-group col-md-2">
         <label for="inputPriceL">Giá sizeL</label>
-        <input name="priceL" type="number" class="form-control" id="inputPriceL" th:value="${price.get().sizeL}">
+        <input name="priceL" type="number" class="form-control" id="inputPriceL" th:value="${price.get().sizeL}" th:disabled="${detail}">
       </div>
     </div>
     <div class="form-group">
       <label for="description">Mô tả</label>
       <input name="description" type="text" class="form-control"  id="description" placeholder="Nhập mô tả sản phẩm"
-      th:value="${product.get().description}">
+      th:value="${product.get().description}" th:disabled="${detail}">
     </div>
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="inputState">Loại sản phẩm</label>
-        <select name="category" id="inputState" class="form-control">
-          <option th:each="category:${categories}" th:text="${category.getName()}" th:value="${category.getId()}">Choose</option>
+        <select name="category" id="inputState" class="form-control" th:disabled="${detail}">
+          <option th:each="category:${categories}" th:text="${category.getName()}" th:value="${category.getId()}"
+          >Choose</option>
         </select>
       </div>
     </div>
     <label>Ảnh sản phẩm</label>
     <div class="form-group">
       <div class="form-group col-md-4">
-        <input th:value="${product.get().img}" type="file" class="custom-file-input" id="customFile" name="img">
+        <input th:value="${product.get().img}" type="file" class="custom-file-input" id="customFile" name="img" th:disabled="${detail}">
         <label class="custom-file-label" for="customFile">Choose file</label>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Sửa</button>
+    <button type="submit" class="btn btn-primary" th:hidden="${detail}">Sửa</button>
   </form>
+  <button class="btn btn-primary" th:hidden="!${detail}">
+    <a th:href="'/admin/product/edit/' + ${product.get().id}" style="color: white">Sửa</a></button>
 </div>
 </body>
 <script>
@@ -75,5 +81,6 @@
     const fileName = $(this).val().split("\\").pop();
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
   });
+
 </script>
 </html>

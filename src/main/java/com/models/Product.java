@@ -99,4 +99,12 @@ public class Product {
     public void setPrice(Price price) {
         this.price = price;
     }
+
+    @Transient
+    public String getProductImagePath(){
+        if(img == null){
+            return null;
+        }
+        return "/product/" + name + "/" + img;
+    }
 }

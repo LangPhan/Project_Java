@@ -12,14 +12,24 @@ import com.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -98,7 +108,7 @@ public class AdminController {
     }
 
     //PRODUCT MANAGEMENT
-    @GetMapping("product")
+    @GetMapping("/product")
     public String gettingProduct(Model model){
         List<Product> products = productService.findAllProduct();
         model.addAttribute("products", products);
@@ -114,12 +124,38 @@ public class AdminController {
     public String postingAddProduct(@ModelAttribute("product")Product product,
                                     @RequestParam(name = "priceS") Double priceS,
                                     @RequestParam(name = "priceM") Double priceM,
-                                    @RequestParam(name = "priceL") Double priceL){
+                                    @RequestParam(name = "priceL") Double priceL,
+                                    @RequestParam(name = "image") MultipartFile multipartFile) throws IOException {
+        String filename = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         Price price = new Price(priceS,priceM,priceL);
         priceService.savePrice(price);
         product.setPrice(price);
         productService.saveProduct(product);
+
+        String uploadDir = "/product/" + product.getName();
+        Path uploadPath = Paths.get(uploadDir);
+        if(!Files.exists(uploadPath)){
+            Files.createDirectories(uploadPath);
+        }
+        try (InputStream inputStream = multipartFile.getInputStream()){
+            Path filePath = uploadPath.resolve(filename);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        }catch (IOException e){
+            throw new IOException("Could not upload file "+ filename);
+        }
+
         return "admin/add-product";
+    }
+    @GetMapping("product/detail/{id}")
+    public ModelAndView gettingDetailProduct(@PathVariable("id") Long id){
+        Optional<Product> product = productService.findProductById(id);
+        ModelAndView modelAndView = new ModelAndView("admin/edit-product");
+        modelAndView.addObject("product",product);
+        modelAndView.addObject("category_id", categoryService.getCategoryById(product.get().getCategory().getId()));
+        modelAndView.addObject("price", priceService.findPriceById(product.get().getPrice().getId()));
+        modelAndView.addObject("categories", categoryService.getAllCategories());
+        modelAndView.addObject("detail", true);
+        return modelAndView;
     }
     @GetMapping("product/edit/{id}")
     public String gettingEditProduct(@PathVariable("id") Long id, Model model){
@@ -146,5 +182,16 @@ public class AdminController {
         }
         productService.saveProduct(product);
        return "redirect:/admin/product";
+    }
+    @PostMapping("product/delete/{id}")
+    public String postingDeleteProduct(@PathVariable("id") Long id, Model model){
+        if(productService.findProductById(id).isPresent()){
+            productService.findProductById(id).get().setCategory(null);
+            productService.findProductById(id).get().setPrice(null);
+            productService.deleteProductById(id);
+            model.addAttribute("message","Xóa sản phẩm thành công");
+            return gettingProduct(model);
+        }
+        return gettingProduct(model);
     }
 }
