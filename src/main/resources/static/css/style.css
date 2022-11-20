@@ -1,0 +1,349 @@
+.toast{
+    position: absolute;
+    margin-left: 82vw;
+    margin-top: 60vh;
+}
+/* style body */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 14px;
+    color: #666;
+    line-height: 18px;
+    z-index: -10000;
+    background: #f2f5f9;
+}
+/* style header */
+.header {
+    width: auto;
+    background: #fdfdfd;
+    border-bottom: 1px solid #e2e2e3;
+}
+li#apps.nav-item{
+    margin-right: 100px;
+}
+/* style icon */
+ul li a{
+    font-weight: bold;
+}
+#games{
+    transition: all .2s ease-in-out;
+}
+#apps{
+    transition: all .2s ease-in-out;
+
+}
+#users{
+    transition: all .2s ease-in-out;
+}
+#games:hover{
+    background-color: rgb(218, 212, 212);
+    transform: scale(1.1);
+    border-bottom: 1px solid #0e0e0e;
+}
+#apps:hover{
+    background-color: rgb(218, 212, 212);
+    background-clip: content-box;
+    transform: scale(1.1);
+    border-bottom: 1px solid #0e0e0e;
+}
+#users:hover{
+    background-color: rgb(218, 212, 212);
+    transform: scale(1.1);
+    border-bottom: 1px solid #0e0e0e;
+}
+/* style row-1 */
+.main{
+    padding-top: 20px;
+    height:auto;
+}
+/* style banner */
+#row-1 .col-lg-8{
+    margin-left: 25px;
+    width: auto;
+    overflow: hidden;
+    position: relative;
+    /* border: 1px solid #ddd; */
+    direction: ltr;
+}
+.carousel-item img{
+    margin: auto;
+    width: 100%;
+    height: 100%;
+}
+/* style search */
+#row-1 .col-lg-3{
+    margin-left: 25px;
+    width: auto;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #ddd;
+    direction: ltr;
+    background: #fff;
+    box-shadow: 0 2px 3px 0 rgb(0 0 0 / 15%);
+}
+.search{
+    margin-top: 10px;
+}
+/* style hotkey */
+.hot a{
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 0px 10px;
+    margin-right: 10px;
+    background: #f2f5f9;
+    line-height: 24px;
+    height: 24px;
+    font-size: 13px;
+    color: #5d5d5d;
+    border-radius: 4px;
+    text-decoration: none;
+    color: rgb(44, 42, 42);
+}
+.hot a:hover{
+    background: #21CA61;
+    color: white;
+}
+
+/* style banner QC */
+#bannerQC .flip-card{
+    background-color: transparent;
+    width: 100%;
+    height: 180px;
+    border: 1px solid rgb(241, 241, 241);
+    perspective: 1000px;
+    float: left;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+#bannerQC img{
+    width: 100%;
+    height: 100%;
+}
+/* clear */
+.clear {
+    clear: both;
+    overflow: hidden;
+}
+/* style title  */
+#row-2 .col-lg-8{
+    background: #fff;
+    width: 100%;
+    box-shadow: 0 2px 3px 0 rgb(0 0 0 / 15%);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 25px;
+}
+#row-2 .col-lg-8 .title{
+    background: #fbfbfb;
+    border-bottom: 1px solid #e8e8e8;
+    height: 55px;
+    line-height: 55px;
+    color: #666;
+    font-size: 18px;
+    padding: 0px 10px;
+    font-weight: 400;
+    position: relative;
+}
+#row-2 .col-lg-8 a{
+    color: #666;
+    text-decoration: none;
+}
+#row-2 .col-lg-8 a:hover{
+    color:#21CA61;
+}
+
+/* style games hot */
+div.card{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    font-weight: bold;
+    width: 25%;
+    float: left;
+    position: relative;
+    display: block;
+    position: relative;
+    height: auto;
+    padding-top: 10px;
+    transition: all .2s ease-in-out;
+    overflow: hidden;
+}
+div.card:hover{
+    background:#e0e6e2;
+}
+div.card button{
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #21CA61;;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    opacity: 0.8;
+}
+div.card button:hover{
+    opacity: 1;
+    transform: scale(1.1);
+}
+div.card h{
+    white-space: nowrap;
+    width: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+div.card img{
+    position: center; display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    border-radius: 5px;
+}
+.price{
+    color: red;
+    font-size: 20px;
+}
+.checked {
+    color: orange;
+}
+
+/* style new games */
+#row-2 .col-lg-3{
+    margin-left: 25px;
+    width: auto;
+    overflow: hidden;
+    position: sticky;
+    border: 1px solid #ddd;
+    direction: ltr;
+    background: #fff;
+    box-shadow: 0 2px 3px 0 rgb(0 0 0 / 15%);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    top: 60px;
+    max-height: 507px;
+}
+#row-2 .col-lg-3 .title{
+    background: #fbfbfb;
+    border-bottom: 1px solid #e8e8e8;
+    height: 55px;
+    line-height: 55px;
+    color: #666;
+    font-size: 18px;
+    padding: 0px 10px;
+    font-weight: 400;
+    position: relative;
+    text-align: center;
+}
+#row-2 .col-lg-3 a{
+    color: #666;
+    text-decoration: none;
+}
+#row-2 .col-lg-3 a:hover{
+    color:#21CA61;
+}
+
+div.flip-card {
+    background-color: transparent;
+    width: 50%;
+    height: 150px;
+    border: 1px solid #f1f1f1;
+    perspective: 1000px; /* Remove this if you don't want the 3D effect */
+    float:left;
+}
+div.flip-card img {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+div.flip-card h{
+    white-space: nowrap;
+    width: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+div.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+div.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+div.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+div.flip-card-front {
+    background-color: white;
+    color: black;
+}
+div.flip-card-back {
+    background-color: #21CA61;
+    color: white;
+    transform: rotateY(180deg);
+}
+div.flip-card button{
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #00c04a;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    position:relative;
+    margin-top:30px;
+    opacity: 0.8;
+}
+div.flip-card button:hover{
+    opacity: 1;
+}
+
+/* style footer */
+.footer {
+    width: auto;
+    color: #777;
+    line-height: 50px;
+    text-align: center;
+    background: #f2f5f9;
+}
+/* responsive */
+@media screen and (max-width:1000px){
+    #row-1 .col-lg-3{
+        width: 100%;
+    }
+    #row-2 .col-lg-3{
+        width:100%;
+        position: relative;
+        top: 0px;
+    }
+    div.flip-card img {
+        width: 75%;
+        height: 100%;
+    }
+    div.flip-card2 img {
+        width: 50%;
+        height: 100%;
+        /* border-radius: 5px; */
+    }
+    div.flip-card2-front {
+        background-color: #21CA61;
+    }
+}
+@media screen and (max-width:762px){
+    li#apps.nav-item{
+        margin-right: 0px;
+    }
+}

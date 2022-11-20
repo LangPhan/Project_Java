@@ -2,7 +2,9 @@ package com.controllers;
 
 import com.commons.UserConstant;
 import com.models.Account;
+import com.models.User;
 import com.repositories.AccountRepository;
+import com.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ public class AccountController {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     /*private List<String> getRolesByLoggedUser(Principal principal){
         String roles = getLoggedUser(principal).getRole();
@@ -72,9 +76,21 @@ public class AccountController {
         accountRepository.save(account);
         String notify = "Đăng kí tài khoản thành công";
         model.addAttribute("notify", notify);
+        return "users/update-info";
+    }
+    @GetMapping("/update-info")
+    public String getUpdateInfo(Model model){
+        User user = new User();
+        model.addAttribute(user);
+        return "users/update-info";
+    }
+    @PostMapping("/update-info")
+    public String postUpdateInfo(@ModelAttribute("user")User user, Model model){
+        userRepository.save(user);
+        String notify = "Đăng kí tài khoản thành công";
+        model.addAttribute("notify", notify);
         return "users/login";
     }
-
     @GetMapping("/login")
     public String getLogin(Model model,
                            @CookieValue(name = "pass", defaultValue = "") String pass,
@@ -91,7 +107,7 @@ public class AccountController {
                              @RequestParam(value = "remember-me", defaultValue = "") String remember){
         Optional<Account> findUser = accountRepository.findByUsername(account.getUsername());
         if(findUser.isEmpty()){
-            message = "Username or password was wrong";
+            message = "Tên đăng nhập và mật khẩu không chính xác";
             model.addAttribute("message", message);
             return "users/login";
         }else{
@@ -108,7 +124,7 @@ public class AccountController {
                 }
                 return "redirect:/user/";
             }else{
-                message = "Username or password was wrong";
+                message = "Tên đăng nhập và mật khẩu không chính xác";
                 model.addAttribute("message", message);
                 return "users/login";
             }

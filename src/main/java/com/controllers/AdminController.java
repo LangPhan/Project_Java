@@ -22,11 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -139,7 +134,8 @@ public class AdminController {
                                     @RequestParam(name = "priceS") Double priceS,
                                     @RequestParam(name = "priceM") Double priceM,
                                     @RequestParam(name = "priceL") Double priceL,
-                                    @RequestParam(name = "image") MultipartFile multipartFile) throws IOException {
+                                    @RequestParam(name = "image") MultipartFile multipartFile,
+                                        Model model) throws IOException {
         String filename = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         if(!filename.isEmpty()){
             product.setImg(filename);
@@ -151,18 +147,9 @@ public class AdminController {
         priceService.savePrice(price);
         product.setPrice(price);
         productService.saveProduct(product);
-///
-//        String uploadDir = "uploads/";
-        /*Path uploadPath = Paths.get("uploads/");
-        if(!Files.exists(uploadPath)){
-            Files.createDirectories(uploadPath);
-        }
-        try (InputStream inputStream = multipartFile.getInputStream()){
-            Path filePath = uploadPath.resolve(filename);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        }catch (IOException e){
-            throw new IOException("Could not upload file "+ filename);
-        }*/
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+        model.addAttribute("message","Thêm sản phẩm thành công");
 
         return "admin/add-product";
     }
@@ -184,6 +171,7 @@ public class AdminController {
         model.addAttribute("category_id", categoryService.getCategoryById(product.get().getCategory().getId()));
         model.addAttribute("price", priceService.findPriceById(product.get().getPrice().getId()));
         model.addAttribute("categories", categoryService.getAllCategories());
+
         return "admin/edit-product";
     }
     @PostMapping("product/edit/{id}")
