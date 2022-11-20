@@ -44,7 +44,12 @@
             <tr th:each="product, iStat:${products}">
                 <th scope="row" th:text="${iStat.count}">1</th>
                 <td th:text="${product.getName()}">1</td>
-                <td><img src="" th:alt="${product.name}" style="width: 50px"></td>
+<!--                <td th:text="${product.getImg()}">-->
+                <td>
+
+<!--                    <img src="" th:alt="${product.name}" style="width: 50px">-->
+                    <img th:src="@{'/getimage/'+${product.getImg()}}" width="70px" height="70px">
+                </td>
                 <td th:text="${product.getCreatedAt()}">1</td>
                 <td th:text="${product.getUpdateAt()}">1</td>
                 <td><button type="button" class="btn btn-success"><a th:href="@{'/admin/product/detail/' + ${product.id}}">Chi tiết</a></button>
