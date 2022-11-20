@@ -29,6 +29,7 @@
     <h2>Thêm sản phẩm</h2>
     <form action="admin/products/add" th:action="${'/admin/product/add'}" method="post" th:object="${product}" enctype="multipart/form-data">
         <div class="form-row">
+<!--            <input type="hidden" name="id" th:field="*{id}">-->
             <div class="form-group col-md-6">
                 <label for="inputEmail4">Tên sản phẩm</label>
                 <input name = "name" type="text" class="form-control" id="inputEmail4"  placeholder="Nhập tên sản phẩm">
@@ -54,8 +55,7 @@
             <div class="form-group col-md-4">
                 <label for="inputState">Loại sản phẩm</label>
                 <select name="category" id="inputState" class="form-control">
-                    <option th:each="category:${categories}" th:text="${category.getName()}" th:value="${category.getId()}"
-                    >Choose</option>
+                    <option th:each="category:${categories}" th:text="${category.getName()}" th:value="${category.getId()}">Choose</option>
                 </select>
             </div>
         </div>
@@ -65,12 +65,29 @@
                 <input type="file" class="custom-file-input" id="customFile" name="image" accept="image/png, image/jpeg">
                 <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
+<!--            <div class="form-group col-md-4">-->
+<!--                 <img src="#" id="imgPreview" height="100px" width="100px" th:src="@{${'/image/'+product.getImg()}}">-->
+<!--            </div>-->
         </div>
         <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
     </form>
 </div>
 </body>
 <script>
+
+
+    // function readURL(input){
+    //     if(input.files && input.files[0]){
+    //         var reader = new FileReader();
+    //         reader.onload = function (e){
+    //             $('#imgPreview').attr('src',e.target.result).height(100).width(100);
+    //         }
+    //         reader.readAsDataURL(input.files[0]);
+    //     }
+    // }
+    // $('#image').change(function (){
+    //     readURL(this);
+    // });
     $(".custom-file-input").on("change", function() {
         const fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
