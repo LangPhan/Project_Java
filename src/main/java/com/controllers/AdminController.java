@@ -9,6 +9,7 @@ import com.services.AccountService;
 import com.services.CategoryService;
 import com.services.PriceService;
 import com.services.ProductService;
+import com.utils.UploadFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -127,17 +128,19 @@ public class AdminController {
                                     @RequestParam(name = "priceL") Double priceL,
                                     @RequestParam(name = "image") MultipartFile multipartFile) throws IOException {
         String filename = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-//        giang
-        product.setImg(filename);
-
-//        giang
+        if(!filename.isEmpty()){
+            product.setImg(filename);
+            UploadFile.uploadFiles(multipartFile, filename);
+        }else{
+            product.setImg(null);
+        }
         Price price = new Price(priceS,priceM,priceL);
         priceService.savePrice(price);
         product.setPrice(price);
         productService.saveProduct(product);
 ///
 //        String uploadDir = "uploads/";
-        Path uploadPath = Paths.get("uploads/");
+        /*Path uploadPath = Paths.get("uploads/");
         if(!Files.exists(uploadPath)){
             Files.createDirectories(uploadPath);
         }
@@ -146,7 +149,7 @@ public class AdminController {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         }catch (IOException e){
             throw new IOException("Could not upload file "+ filename);
-        }
+        }*/
 
         return "admin/add-product";
     }
@@ -174,8 +177,17 @@ public class AdminController {
     public String postingEditProduct(@ModelAttribute(name = "product") Product product,
                                      @RequestParam(name = "priceS") Double priceS,
                                      @RequestParam(name = "priceM") Double priceM,
-                                     @RequestParam(name = "priceL") Double priceL
-                                     ){
+                                     @RequestParam(name = "priceL") Double priceL,
+                                     @RequestParam(name = "image", defaultValue = "") MultipartFile multipartFile) throws IOException{
+
+        String filename = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        if(!filename.isEmpty()){
+            product.setImg(filename);
+            UploadFile.uploadFiles(multipartFile, filename);
+        }else{
+            product.setImg(productService.findProductById(product.getId()).get().getImg());
+        }
+
         Long idPrice = productService.findProductById(product.getId()).get().getPrice().getId();
         Optional<Price> price = priceService.findPriceById(idPrice);
         if(price.isPresent()){

@@ -13,14 +13,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @Controller
 public class ImageUploadController {
     @RequestMapping(value = "getimage/{photo}",method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<ByteArrayResource> getImage(@PathVariable("photo") String photo){
-        if(!photo.equals("") || photo!=null){
-            try {
+        try {
+            if(!Objects.equals(photo, "null")){
                 Path filename = Paths.get("uploads",photo);
                 byte[] buffer = Files.readAllBytes(filename);
                 ByteArrayResource byteArrayResource = new ByteArrayResource(buffer);
@@ -28,11 +29,10 @@ public class ImageUploadController {
                         .contentLength(buffer.length)
                         .contentType(MediaType.parseMediaType("image/png"))
                         .body(byteArrayResource);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return ResponseEntity.badRequest().build();
-
     }
 }
