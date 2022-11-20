@@ -135,7 +135,7 @@ public class AdminController {
         priceService.savePrice(price);
         product.setPrice(price);
         productService.saveProduct(product);
-//
+///
 //        String uploadDir = "uploads/";
         Path uploadPath = Paths.get("uploads/");
         if(!Files.exists(uploadPath)){
