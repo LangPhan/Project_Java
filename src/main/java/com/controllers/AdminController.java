@@ -11,6 +11,8 @@ import com.services.PriceService;
 import com.services.ProductService;
 import com.utils.UploadFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -109,11 +111,22 @@ public class AdminController {
     }
 
     //PRODUCT MANAGEMENT
-    @GetMapping("/product")
-    public String gettingProduct(Model model){
-        List<Product> products = productService.findAllProduct();
-        model.addAttribute("products", products);
+    @GetMapping("/product/{pageNum}")
+    public String gettingProduct(Model model,
+                                 @PathVariable(name = "pageNum") int pageNum){
+        Page<Product> page = productService.findAllProduct(pageNum);
+//        List<Product> products = productService.findAllProduct();
+        List<Product> listProducts = page.getContent();
+//        model.addAttribute("products", products);
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("products", listProducts);
         return "admin/products";
+    }
+    @GetMapping("product")
+    public String viewHomePage(Model model) {
+        return gettingProduct(model, 1);
     }
     @GetMapping("product/add")
     public String gettingAddProduct(Model model){
@@ -199,15 +212,25 @@ public class AdminController {
         productService.saveProduct(product);
        return "redirect:/admin/product";
     }
-    @PostMapping("product/delete/{id}")
-    public String postingDeleteProduct(@PathVariable("id") Long id, Model model){
-        if(productService.findProductById(id).isPresent()){
-            productService.findProductById(id).get().setCategory(null);
-            productService.findProductById(id).get().setPrice(null);
-            productService.deleteProductById(id);
-            model.addAttribute("message","Xóa sản phẩm thành công");
-            return gettingProduct(model);
-        }
-        return gettingProduct(model);
+//    @PostMapping("product/delete/{id}")
+//    public String postingDeleteProduct(@PathVariable("id") Long id, Model model){
+//        if(productService.findProductById(id).isPresent()){
+//            productService.findProductById(id).get().setCategory(null);
+//            productService.findProductById(id).get().setPrice(null);
+//            productService.deleteProductById(id);
+//            model.addAttribute("message","Xóa sản phẩm thành công");
+//            return gettingProduct(model);
+//        }
+//        return gettingProduct(model);
+//    }
+
+    @GetMapping("product-search")
+    public String viewHomePage(Model model, @Param("keyword") String keyword) {
+        List<Product> listProducts = productService.listAll(keyword);
+        model.addAttribute("products", listProducts);
+        model.addAttribute("keyword", keyword);
+
+        return "admin/products";
     }
+
 }
