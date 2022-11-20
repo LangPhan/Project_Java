@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- header -->
+        <div class="header">
+            <!-- logo -->
+            <nav class="navbar navbar-expand-md bg-white navbar-light">
+                <!-- Brand -->
+                <a class="navbar-brand" href="home.html">
+                    <img src="getimage/logo.png" width="200" height="50" style="padding-left: 50px;">
+                </a>
+                
+                <!-- Toggler/collapsibe Button -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+                </button> 
+            
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item" id="games" style="padding-top: 8px">       
+                            <a class="nav-link" href="games.html"> <img src="images/game icon.png" style="width:50px"> Trò Chơi</a>
+                        </li>
+                        <li class="nav-item" id = "apps">
+                            <a class="nav-link" href="apps.html"> <img src="images/android icon.png" style="width:50px">Ứng dụng</a>
+                        </li>
+                        <li class="nav-item" id ="users" style="padding-right: 20px;">
+                            <a class="nav-link" href="login.html"> <img src="getimage/user_icon.png" style="width:50px">Đăng nhập</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav> 
+        </div>
+    <!-- main -->
+    <div class="main">
+        <div class="row" id="row-1">
+            <!-- Banner -->
+            <div class="col-lg-8 title-item">
+                <div id="demo" class="carousel slide" data-ride="carousel" style="height:100%">
+                    <!-- Indicators -->
+                    <!-- <ul class="carousel-indicators">
+                      <li data-target="#demo" data-slide-to="0" class="active"></li>
+                      <li data-target="#demo" data-slide-to="1"></li>
+                      <li data-target="#demo" data-slide-to="2"></li>
+                      <li data-target="#demo" data-slide-to="3"></li>
+                    </ul> -->
+                    <!-- The slideshow -->
+                    <div class="carousel-inner" style="height:100%">
+                      <div class="carousel-item active" style="height:100%">
+                        <img src="getimage/banner1.png" alt="Banner 1">
+                      </div>
+                      <div class="carousel-item" style="height:100%">
+                        <img src="getimage/banner2.jpg" alt="Banner 2">
+                      </div>
+                      <div class="carousel-item" style="height:100%">
+                        <img src="getimage/banner3.png" alt="Banner 3">
+                      </div>
+                      <div class="carousel-item" style="height:100%">
+                        <img src="getimage/banner4.png" alt="Banner 4">
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Search -->
+            <div class="col-lg-3 title-item">
+                <div class="search">
+                    <form action ="" method = "GET" class="form-inline">
+                        <h style="color: rgb(33, 202, 33); font-weight: bold; font-size:18px ; margin-bottom:8px">Bạn Cần Tìm Gì?</h>
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+                <!-- hot keys -->
+                <div class="hot">
+                    <a href="">Trà sữa</a>
+                    <a href="">Cafe</a>
+                    <a href="">Trà đào</a>
+                    <a href="">Lien Quan</a>
+                    <a href="">Free Fire</a>
+                    <a href="">Cap Cut</a>
+                </div>
+                <!-- banner QC -->
+                <div class="bannerQC" id="bannerQC">
+                  <div class="flip-card">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="getimage/bannerQC.png" alt="Shopee">
+                      </div>
+                      <div class="flip-card-back">
+                        <!-- <img src="images/bannerQC2.jpg" alt="Shopee2"> -->
+                        <a href="https://shopee.vn"><img src="getimage/bannerQC2.jpg" alt="Shopee2"></a>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+            </div>
+
+        </div> 
+        <!-- clear  -->
+    <div class="clear"></div>
+        <div class="row" id="row-2">
+            
+            <div class="col-lg-8 title-item">
+                <!-- title games hot -->
+                <div class="title">
+                    <a href="">Hot Games >></a>
+                </div>
+                <!-- games hot list -->
+                <div class="list-game">
+                    <div class="card">
+                        <img src="images/games/Mapple Story M.png" alt="Mapple Story M" >
+                        <h>Mapple Story M</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                      </div> 
+                    <div class="card">
+                        <img src="images/games/Amongus.png" alt="Among Us">
+                        <h>Among Us </h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                    </div>  
+                    <div class="card">
+                        <img src="images/games/lienquan.png" alt="lienquan" >
+                        <h>Liên Quân</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                    </div>   
+                    <div class="card">
+                        <img src="images/games/Digital World.png" alt="Digital World">
+                        <h>Digital World</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                    </div>  
+                    <div class="card">
+                        <img src="images/games/Pupg.png" alt="Pubg">
+                        <h>Pubg Mobile</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                    </div> 
+                    <div class="card">
+                        <img src="images/games/Tocchien.png" alt="Tocchien">
+                        <h>Tốc Chiến</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                    </div>  
+                    <div class="card">
+                        <img src="images/games/Clasofclan.png" alt="Clasofclan">
+                        <h>Clash of clan</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                    </div>  
+                    <div class="card">
+                        <img src="images/games/Freefire.png" alt="Freefire" >
+                        <h>Free fire</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                    </div>   
+                </div>
+            </div>
+
+            <div class="col-lg-3 title-item">
+                <div class="title">
+                    <a href="">Games mới ra mắt</a>
+                </div>
+                <div class="new-games">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/games/Indentity V.png" alt="Indentity V">
+                          </div>
+                          <div class="flip-card-back">
+                            <h>Indentity V</h>
+                            <p class="price">Free</p>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <a><button>Tải Xuống</button></a>
+                          </div>
+                        </div>
+                      </div> 
+                    
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/games/Teamfight Tactics.png" alt="Teamfight Tactics">
+                          </div>
+                          <div class="flip-card-back">
+                            <h>Teamfight Tactics</h>
+                            <p class="price">Free</p>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <a><button>Tải Xuống</button></a>
+                          </div>
+                        </div>
+                    </div> 
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/games/Dream League Soccer.png" alt="Dream League Soccer">
+                          </div>
+                          <div class="flip-card-back">
+                            <h>Dream League Soccer</h>
+                            <p class="price">Free</p>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <a><button>Tải Xuống</button></a>
+                          </div>
+                        </div>
+                    </div> 
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/games/ROBLOX.png" alt="ROBLOX">
+                          </div>
+                          <div class="flip-card-back">
+                            <h>ROBLOX</h>
+                            <p class="price">Free</p>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <a><button>Tải Xuống</button></a>
+                          </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/games/Minecraft.png" alt="Minecraft">
+                          </div>
+                          <div class="flip-card-back">
+                            <h>Minecraft Earth</h>
+                            <p class="price">Free</p>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <a><button>Tải Xuống</button></a>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/games/Mini World Block Art.png" alt="Mini World Block Art">
+                          </div>
+                          <div class="flip-card-back">
+                            <h>Mini World Block Art</h>
+                            <p class="price">Free</p>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <a><button>Tải Xuống</button></a>
+                          </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="clear"></div>
+    <div class="row" id="row-2">
+            
+        <div class="col-lg-8 title-item">
+            <!-- title apps hot -->
+            <div class="title">
+                <a href="">Hot Apps >></a>
+            </div>
+            <!-- apps hot list -->
+            <div class="list-game">
+                <div class="card">
+                    <img src="images/Apps/Chomre.png" alt="Chomre" >
+                    <h>Chomre</h>
+                    <p class="price">Free</p>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <a><button>Tải Xuống</button></a>
+                  </div> 
+                <div class="card">
+                    <img src="images/Apps/FaceBook.png" alt="Facebook">
+                    <h>Facebook</h>
+                    <p class="price">Free</p>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <a href="facebook.html"><button>Tải Xuống</button></a>
+                </div>  
+                <div class="card">
+                    <img src="images/Apps/Intargram.png" alt="Intargram" >
+                    <h>Instagram</h>
+                    <p class="price">Free</p>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <a><button>Tải Xuống</button></a>
+                </div>   
+                <div class="card">
+                    <img src="images/Apps/Contacts/Messenger.png" alt="Messenger">
+                    <h>Messenger</h>
+                    <p class="price">Free</p>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <a><button>Tải Xuống</button></a>
+                </div>  
+                <div class="card">
+                    <img src="images/Apps/Contacts/Zalo.png" alt="Zalo">
+                    <h>Zalo</h>
+                    <p class="price">Free</p>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <a><button>Tải Xuống</button></a>
+                </div> 
+                <div class="card">
+                    <img src="images/Apps/Tik Tok.png" alt="Tik Tok">
+                    <h>Tik Tok</h>
+                    <p class="price">Free</p>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <a><button>Tải Xuống</button></a>
+                </div>  
+                <div class="card">
+                    <img src="images/Apps/Cap cut.png" alt="Capcut">
+                    <h>Cap cut</h>
+                    <p class="price">Free</p>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <a><button>Tải Xuống</button></a>
+                </div>  
+                <div class="card">
+                    <img src="images/Apps/Mua sam/Shopee.png" alt="Shopee">
+                    <h>Shopee</h>
+                    <p class="price">Free</p>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <a><button>Tải Xuống</button></a>
+                </div>   
+            </div>
+        </div>
+
+        <div class="col-lg-3 title-item">
+            <div class="title">
+                <a href="">Apps mới ra mắt</a>
+            </div>
+            <div class="new-games">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="images/Apps/Happy Mod.png" alt="Happy Mod">
+                      </div>
+                      <div class="flip-card-back">
+                        <h>Happy Mod</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                      </div>
+                    </div>
+                  </div> 
+                
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="images/Apps/Học từ vựng.png" alt="Học từ vựng">
+                      </div>
+                      <div class="flip-card-back">
+                        <h>Học từ vựng</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                      </div>
+                    </div>
+                </div> 
+
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="images/Apps/Fake Calls.png" alt="Fake Calls">
+                      </div>
+                      <div class="flip-card-back">
+                        <h>Fake Calls</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                      </div>
+                    </div>
+                </div> 
+
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="images/Apps/Toome.png" alt="Toome">
+                      </div>
+                      <div class="flip-card-back">
+                        <h>Toome</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                      </div>
+                    </div>
+                </div>
+                
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="images/Apps/Nike Training Club.png" alt="Nike Training Club">
+                      </div>
+                      <div class="flip-card-back">
+                        <h>Nike Training Club</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="images/Apps/Lam dep/Camera Fillter Intagram.png" alt="Camera Fillter Intagram">
+                      </div>
+                      <div class="flip-card-back">
+                        <h>Camera Fillter Instagram</h>
+                        <p class="price">Free</p>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <a><button>Tải Xuống</button></a>
+                      </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+    <div class="clear"></div>
+    <!-- footer -->
+    <div class="footer">
+        <h>
+            Copyright by team D.A.T
+        </h>
+    </div>
+</body>
+</html>
