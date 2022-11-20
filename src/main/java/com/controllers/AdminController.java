@@ -121,19 +121,23 @@ public class AdminController {
         return "admin/add-product";
     }
     @PostMapping("product/add")
-    public String postingAddProduct(@ModelAttribute("product")Product product,
+        public String postingAddProduct(@ModelAttribute("product")Product product,
                                     @RequestParam(name = "priceS") Double priceS,
                                     @RequestParam(name = "priceM") Double priceM,
                                     @RequestParam(name = "priceL") Double priceL,
                                     @RequestParam(name = "image") MultipartFile multipartFile) throws IOException {
         String filename = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+//        giang
+        product.setImg(filename);
+
+//        giang
         Price price = new Price(priceS,priceM,priceL);
         priceService.savePrice(price);
         product.setPrice(price);
         productService.saveProduct(product);
-
-        String uploadDir = "/product/" + product.getName();
-        Path uploadPath = Paths.get(uploadDir);
+///
+//        String uploadDir = "uploads/";
+        Path uploadPath = Paths.get("uploads/");
         if(!Files.exists(uploadPath)){
             Files.createDirectories(uploadPath);
         }
