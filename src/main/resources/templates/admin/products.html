@@ -29,14 +29,14 @@
 <div align="center">
         <h1>Danh sách sản phẩm</h1>
         <h4>Thêm sản phẩm mới <a href="/admin/product/add">tại đây</a></h4>
-        <form th:action="'/admin/product-search/'" method="">
+        <form th:action="'/admin/product-search/'">
             Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
             &nbsp;
             <input type="submit" value="Search" />
             &nbsp;
             <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
         </form>
-        <table class="table" style="width: 80%">
+        <table class="table" style="width: 80%; min-height: 430px" >
             <thead>
             <tr>
                 <th scope="col">STT</th>
@@ -66,7 +66,7 @@
             </tr>
             </tbody>
         </table>
-        <div>
+        <div >
             <a th:if="${currentPage > 1}" th:href="@{'/admin/product/'+${pageNum}}">First</a>
             <span th:unless="${currentPage > 1}">First</span>
 

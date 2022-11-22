@@ -1,6 +1,8 @@
 package com.services;
 
+import com.models.Category;
 import com.models.Product;
+import com.repositories.CategoryRepository;
 import com.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +19,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     public Page<Product> findAllProduct(int pageNum) {
-        int pageSize = 5;
+        int pageSize = 4;
 
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
 
@@ -44,5 +46,7 @@ public class ProductService {
         }
         return productRepository.findAll();
     }
-
+    public List<Product> findProductByCategory(Category category){
+        return productRepository.findAllByCategoryIs(category);
+    }
 }

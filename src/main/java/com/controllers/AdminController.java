@@ -44,6 +44,7 @@ public class AdminController {
     private ProductService productService;
     @Autowired
     private PriceService priceService;
+
     private Account getLoggedUser(Principal principal){
         return accountRepository.findByUsername(principal.getName()).get();
     }
@@ -122,6 +123,14 @@ public class AdminController {
     @GetMapping("product")
     public String viewHomePage(Model model) {
         return gettingProduct(model, 1);
+    }
+    @GetMapping("product-search")
+    public String viewHomePageSearch(Model model, @Param("keyword") String keyword) {
+        List<Product> listProducts = productService.listAll(keyword);
+        model.addAttribute("products", listProducts);
+        model.addAttribute("keyword", keyword);
+
+        return "admin/products";
     }
     @GetMapping("product/add")
     public String gettingAddProduct(Model model){
@@ -212,13 +221,5 @@ public class AdminController {
 //        return gettingProduct(model);
 //    }
 
-    @GetMapping("product-search")
-    public String viewHomePage(Model model, @Param("keyword") String keyword) {
-        List<Product> listProducts = productService.listAll(keyword);
-        model.addAttribute("products", listProducts);
-        model.addAttribute("keyword", keyword);
-
-        return "admin/products";
-    }
 
 }

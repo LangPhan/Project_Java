@@ -10,8 +10,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "USER_NAME")
-    private String username;
+    @Column(name = "FULL_NAME")
+    private String fullName;
     @Column(name = "ADDRESS")
     private String address;
     @Column(name = "PHONE_NUMBER")
@@ -22,6 +22,8 @@ public class User {
     private String createdAt;
     @Column(name = "UPDATED_AT", nullable = false)
     private String updateAt;
+    @OneToOne(mappedBy = "user")
+    private Account account;
 
     public User() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -38,12 +40,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getAddress() {
@@ -84,5 +86,13 @@ public class User {
 
     public void setUpdateAt(String updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

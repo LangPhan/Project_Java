@@ -27,17 +27,8 @@ li#apps.nav-item{
 ul li a{
     font-weight: bold;
 }
-#games{
-    transition: all .2s ease-in-out;
-}
-#apps{
-    transition: all .2s ease-in-out;
 
-}
-#users{
-    transition: all .2s ease-in-out;
-}
-#games:hover{
+/*#games:hover{
     background-color: rgb(218, 212, 212);
     transform: scale(1.1);
     border-bottom: 1px solid #0e0e0e;
@@ -47,12 +38,12 @@ ul li a{
     background-clip: content-box;
     transform: scale(1.1);
     border-bottom: 1px solid #0e0e0e;
-}
-#users:hover{
+}*/
+/*#users:hover{
     background-color: rgb(218, 212, 212);
     transform: scale(1.1);
     border-bottom: 1px solid #0e0e0e;
-}
+}*/
 /* style row-1 */
 .main{
     padding-top: 20px;

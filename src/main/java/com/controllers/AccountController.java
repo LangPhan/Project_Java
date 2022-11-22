@@ -5,11 +5,13 @@ import com.models.Account;
 import com.models.User;
 import com.repositories.AccountRepository;
 import com.repositories.UserRepository;
+import com.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.NumberUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +27,7 @@ public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     /*private List<String> getRolesByLoggedUser(Principal principal){
         String roles = getLoggedUser(principal).getRole();
@@ -73,23 +75,52 @@ public class AccountController {
         account.setRole(UserConstant.DEFAULT_ROLE);
         String encryptedPwd = passwordEncoder.encode(account.getPassword());
         account.setPassword(encryptedPwd);
-        accountRepository.save(account);
-        String notify = "Đăng kí tài khoản thành công";
-        model.addAttribute("notify", notify);
-        return "users/update-info";
-    }
-    @GetMapping("/update-info")
-    public String getUpdateInfo(Model model){
-        User user = new User();
-        model.addAttribute(user);
-        return "users/update-info";
-    }
-    @PostMapping("/update-info")
-    public String postUpdateInfo(@ModelAttribute("user")User user, Model model){
-        userRepository.save(user);
         String notify = "Đăng kí tài khoản thành công";
         model.addAttribute("notify", notify);
         return "users/login";
+    }
+    @GetMapping("/update-info/{id}")
+    public String getUpdateInfo(Model model, @PathVariable String id,
+                                @CookieValue(value = "username", defaultValue = "") String username){
+        Optional<Account> account = accountRepository.findByUsername(username);
+        if(account.get().getId() != Long.parseLong(id)){
+            return "redirect:/user/update-info/"+account.get().getId();
+        }
+        User user = new User();
+        if(model.containsAttribute("user_exist")){
+            model.addAttribute("user_exits",model.getAttribute("user_exist"));
+        }else{
+            model.addAttribute("user_exits",account.get().getUser());
+        }
+        model.addAttribute(user);
+        return "users/update-info";
+    }
+    @PostMapping("/update-info/{id}")
+    public String postUpdateInfo(@ModelAttribute("user")User user,
+                                 @PathVariable String id,Model model,
+                                 @CookieValue(value = "username", defaultValue = "") String username){
+        model.addAttribute("user_exist", user);
+        Optional<Account> account = accountRepository.findByUsername(username);
+        if(account.get().getId() != Long.parseLong(id)){
+            return "redirect:/user/update-info/"+account.get().getId();
+        }
+        if(userService.emailIsExist(user.getEmail())){
+            model.addAttribute("message","Email đã tồn tại. Vui lòng sử dụng email khác");
+            return getUpdateInfo(model, id, username);
+        }
+        if(userService.phoneIsExist(user.getPhoneNumber())){
+            model.addAttribute("message",
+                    "Số điện thoại đã được đăng kí. Vui lòng sử dụng số điện thoại khác khác");
+            return getUpdateInfo(model, id, username);
+        }
+        if(user.getPhoneNumber().length() != 10){
+            model.addAttribute("message",
+                    "Số điện thoại không đúng. Vui lòng kiểm tra lại");
+            return getUpdateInfo(model, id, username);
+        }
+        account.get().setUser(user);
+        accountRepository.save(account.get());
+        return "redirect:/";
     }
     @GetMapping("/login")
     public String getLogin(Model model,
@@ -122,21 +153,16 @@ public class AccountController {
                     pass.setPath("/user/login");
                     response.addCookie(pass);
                 }
-                return "redirect:/user/";
+                if(findUser.get().getUser() == null){
+                    return "redirect:/user/update-info/"+findUser.get().getId();
+                }
+                return "redirect:/";
             }else{
                 message = "Tên đăng nhập và mật khẩu không chính xác";
                 model.addAttribute("message", message);
                 return "users/login";
             }
         }
-    }
-    @GetMapping("/logout")
-    public String getLogout(HttpServletResponse response){
-        Cookie cookie = new Cookie("username", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return ("redirect:/user/login");
     }
     @GetMapping("/admin")
     public String getAdmin(){

@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureForwardUrl("/user/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .and().logout().logoutUrl("/user/logout").logoutSuccessUrl("/user/login").deleteCookies()
+                .and().logout().logoutUrl("/user/logout").logoutSuccessUrl("/user/login").deleteCookies("username")
                 .and().rememberMe().tokenValiditySeconds(7 * 24 * 60 * 60).key("this_is_key");
     }
 

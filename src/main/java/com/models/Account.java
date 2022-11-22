@@ -22,6 +22,9 @@ public class Account {
     private String createdAt;
     @Column(name = "UPDATED_AT", nullable = false)
     private String updateAt;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "USER_ID",referencedColumnName = "id")
+    private User user;
 
     public Account() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -85,5 +88,12 @@ public class Account {
 
     public void setUpdateAt(String updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 }
