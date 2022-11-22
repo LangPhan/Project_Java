@@ -22,6 +22,7 @@ body {
 }
 li#apps.nav-item{
     margin-right: 100px;
+    margin-top: 10px;
 }
 /* style icon */
 ul li a{
@@ -187,6 +188,7 @@ div.card h{
     width: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 16px;
 }
 div.card img{
     position: center; display: block;
@@ -197,7 +199,7 @@ div.card img{
 }
 .price{
     color: red;
-    font-size: 20px;
+    font-size: 14px;
 }
 .checked {
     color: orange;

@@ -42,13 +42,13 @@
                     </div>
                 </li>
                 <li class="nav-item" id="apps">
-                    <a class="nav-link" href="apps.html"> <img src="images/android icon.png" style="width:50px">Ứng dụng</a>
+                    <a class="nav-link" href="apps.html"> <img src="getimage/basket-cart-icon.png" style="width:50px">Giỏ hàng</a>
                 </li>
                 <li th:case="true" class="nav-item" id="users" style="padding-right: 20px;">
                     <a class="nav-link" href="/user/login"> <img src="getimage/user_icon.png" style="width:50px">Đăng
                         nhập</a>
                 </li>
-                <li th:case="false" class="nav-item dropdown" id="users" style="padding-right: 20px;">
+                <li th:case="false" class="nav-item dropdown" id="users" style="padding-right: 20px;margin-top: 10px">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false">
                         <img src="getimage/user_icon.png" style="width:50px"
@@ -58,6 +58,7 @@
                         <a class="dropdown-item" href="#">Another action</a>
                         <a class="dropdown-item" href="#">Something else here</a>
                         <div class="dropdown-divider"></div>
+                        <a th:if="${account.get().getRole()=='ROLE_ADMIN'}" class="dropdown-item" href="/admin" style="color: green">Quản lý</a>
                         <a class="dropdown-item" href="/user/logout" style="color: red">Đăng xuất</a>
                     </div>
                 </li>
@@ -149,6 +150,7 @@
                         <button>Tải Xuống</button>
                     </a>
                 </div>
+                <p th:if="${category.getProduct().size()<1}">Đồ uống đang được chuẩn bị...</p>
             </div>
         </div>
 
