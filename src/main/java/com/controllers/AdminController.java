@@ -12,7 +12,11 @@ import com.services.ProductService;
 import com.utils.UploadFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -25,10 +29,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -105,24 +106,98 @@ public class AdminController {
         return "redirect:/admin/category";
     }
 
-    //PRODUCT MANAGEMENT
-    @GetMapping("/product/{pageNum}")
-    public String gettingProduct(Model model,
-                                 @PathVariable(name = "pageNum") int pageNum){
-        Page<Product> page = productService.findAllProduct(pageNum);
-//        List<Product> products = productService.findAllProduct();
-        List<Product> listProducts = page.getContent();
-//        model.addAttribute("products", products);
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("products", listProducts);
+    @GetMapping("/product")
+    public String viewProducts(Model model){
+        List<Product> productList = productService.listProduct();
+        model.addAttribute("products",productList);
         return "admin/products";
     }
-    @GetMapping("product")
-    public String viewHomePage(Model model) {
-        return gettingProduct(model, 1);
+
+    @GetMapping("/product/paging/{pageNum}")
+    public String viewProductsByPaging(Model model,
+                                       @PathVariable(name = "pageNum") int pageNum){
+        Page<Product> products = productService.pageProducts(pageNum);
+
+        model.addAttribute("size", products.getSize());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("productsList", products); // next bc of thymeleaf we make the index.html
+
+        return "admin/productsPaging";
     }
+
+    @GetMapping("/product/pagingandsort/{pageNum}")
+    public String viewProductsByPagingAndSorting(Model model,
+                                       @PathVariable(name = "pageNum") int pageNum,
+                                                 @Param("sortField") String sortField,
+                                                 @Param("sortDir") String sortDir){
+        Page<Product> products = productService.pageProductsandSort(pageNum,sortField,sortDir);
+
+        List<Product> listProducts = products.getContent();
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("size", products.getSize());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("productsList", products); // next bc of thymeleaf we make the index.html
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        return "admin/productsPaging";
+    }
+
+
+    @RequestMapping("/")
+    public String viewHomePage(Model model) {
+        return viewProductsByPagingAndSorting(model, 1, "name", "asc");
+    }
+    @GetMapping("/product/searching/{pageNum}")
+    public String searchProducts(Model model,
+                                       @RequestParam("keyword") String keyword,
+                                       @PathVariable(name = "pageNum") int pageNum){
+        Page<Product> products = productService.searchProduct(pageNum,keyword);
+
+        model.addAttribute("size", products.getSize());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("productsList", products); // next bc of thymeleaf we make the index.html
+
+        return "admin/productsPaging";
+    }
+
+
+    //PRODUCT MANAGEMENT
+//    @GetMapping("/product/{pageNum}")
+//    public String listByPage(Model model,
+//                                 @PathVariable(name = "pageNum") int pageNum,
+//                                        @Param("sortDir") page,
+//                                        @Param("sortField") Optional<Integer> size,
+//                                        @RequestParam(value = "keyword", required = false) String keyword){
+////        int currentPage = page.orElse(1);
+////        int pageSize = size.orElse(5);
+//
+//        Pageable pageable = PageRequest.of(currentPage,pageSize);
+//
+////        Page<Product> resultPage = null;
+////        if(StringUtils.hasText(keyword)){
+////            resultPage = productService.findAllNameContaining(keyword,pageable);
+////            model.addAttribute("keyword",keyword);
+////        }else{
+////            resultPage = productService.findAll(pageable);
+////        }
+////        int totalPages = resultPage.getTotalPages();
+//        List<Product> listProducts = page.getContent();
+//        model.addAttribute("products", listProducts);
+//        model.addAttribute("currentPage", pageNum);
+//        model.addAttribute("totalPages", page.getTotalPages());
+//        model.addAttribute("totalItems", page.getTotalElements());
+//        model.addAttribute("sortField",sortField);
+//        model.addAttribute("sortDir", sortDir);
+//        model.addAttribute("keyword", keyword);
+//        model.addAttribute("reverseSortDir",sortDir.equals("asc")?"desc":"asc");
+//        return "admin/products";
+//    }
+
+
     @GetMapping("product/add")
     public String gettingAddProduct(Model model){
         List<Category> categories = categoryService.getAllCategories();
@@ -212,13 +287,5 @@ public class AdminController {
 //        return gettingProduct(model);
 //    }
 
-    @GetMapping("product-search")
-    public String viewHomePage(Model model, @Param("keyword") String keyword) {
-        List<Product> listProducts = productService.listAll(keyword);
-        model.addAttribute("products", listProducts);
-        model.addAttribute("keyword", keyword);
-
-        return "admin/products";
-    }
 
 }
