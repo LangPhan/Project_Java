@@ -13,6 +13,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             + " OR p.description LIKE %?1%"
             + " OR CONCAT(p.price, '') LIKE %?1%")
     List<Product> search(String keyword);
+    List<Product> findProductByCategory(Category category);
+    List<Product> findTop6ByOrderByCreatedAtDesc();
 
-    List<Product> findAllByCategoryIs(Category category);
+
 }

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${productDetail.get().name}"></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!--<script src="https://kit.fontawesome.com/9a81947f10.js" crossorigin="anonymous"></script>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style-des.css}">
+</head>
+<body>
+<!-- header -->
+<div class="header">
+    <!-- logo -->
+    <nav class="navbar navbar-expand-md bg-white navbar-light">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/">
+            <img src="/getimage/logo.png" width="210" height="70" style="padding-left: 50px;">
+        </a>
+
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto" th:switch="${account == null}">
+
+                <li class="nav-item dropdown" id="games" style="padding-top: 8px">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        <img src="/getimage/drink_icon.png" style="width:50px"> Đồ uống</a>
+                    <div class="dropdown-menu">
+                        <a th:each="category:${categories}" th:text="${category.getName()}" class="dropdown-item"
+                           href="#">Action</a>
+                    </div>
+                </li>
+                <li class="nav-item" id="apps">
+                    <a class="nav-link" href="apps.html"> <img src="/getimage/basket-cart-icon.png" style="width:50px">Giỏ hàng</a>
+                </li>
+                <li th:case="true" class="nav-item" id="users" style="padding-right: 20px;">
+                    <a class="nav-link" href="/user/login"> <img src="/getimage/user_icon.png" style="width:50px">Đăng
+                        nhập</a>
+                </li>
+                <li th:case="false" class="nav-item dropdown" id="users" style="padding-right: 20px;margin-top: 10px">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        <img src="/getimage/user_icon.png" style="width:50px"
+                             th:text="${account.get().username.toUpperCase()}"></a>
+                    <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a th:if="${account.get().getRole()=='ROLE_ADMIN'}" class="dropdown-item" href="/admin" style="color: green">Quản lý</a>
+                        <a class="dropdown-item" href="/user/logout" style="color: red">Đăng xuất</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="clear"></div>
+<div class="main">
+    <div class="row" id="row-1">
+        <div class="col-lg-12 title-item">
+            <div class="search">
+                <form action="" class="form-inline" method="GET">
+                    <h style="color: rgb(33, 202, 33); font-weight: bold; font-size:18px ; margin-bottom:8px">Bạn Cần
+                        Tìm Gì?
+                    </h>
+                    <input aria-label="Search" class="form-control mr-sm-2" placeholder="Search" type="search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="row-2">
+
+        <div class="col-lg-8 ">
+            <!-- link -->
+            <div class="title">
+                <a href="/">Trang chủ >></a> <a href="apps.html">Apps >></a> <a href="apps.html">Mạng xã hội
+                >></a> <a href="">FaceBook</a>
+            </div>
+            <!-- tab content-->
+            <div class="tab-content">
+                <dt>
+                    <div class="icon">
+                        <img th:alt="${productDetail.get().name}" th:src="@{'/getimage/'+${productDetail.get().getImg()}}">
+                    </div>
+                </dt>
+                <dd>
+                    <div class="title-des">
+                        <h1 th:text="${productDetail.get().name}">FaceBook</h1>
+                    </div>
+                    <div class="price">
+                        <div class="price choose">
+                            <input type="radio" id="huey" name="price" th:value="${productDetail.get().price.sizeS}"
+                                   checked>
+                            <label for="huey" th:text="'Size S: '+${productDetail.get().price.sizeS}">Huey</label>
+                        </div>
+
+                        <div class="price choose">
+                            <input type="radio" id="dewey" name="price" th:value="${productDetail.get().price.sizeM}">
+                            <label for="dewey" th:text="'Size M: '+${productDetail.get().price.sizeM}">Dewey</label>
+                        </div>
+
+                        <div class="price choose">
+                            <input type="radio" id="louie" name="price" th:value="${productDetail.get().price.sizeL}">
+                            <label for="louie" th:text="'Size L: '+${productDetail.get().price.sizeL}">Louie</label>
+                        </div>
+                    </div>
+                    <div class="star">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star "></span>
+                    </div>
+                    <div class="author">
+                        <p>FaceBook</p>
+                    </div>
+                    <div class="button">
+                        <a>
+                            <button>Tải Xuống</button>
+                        </a>
+                    </div>
+                </dd>
+            </div>
+            <div class="description">
+                <span class="heading">Mô tả</span>
+                <div class="content" itemprop="description" th:text="${productDetail.get().description}">Cập nhật thông tin từ bạn bè nhanh chóng hơn bao giờ
+                    hết.<br><br>• Xem bạn bè đang làm gì<br>• Chia sẻ cập nhật, ảnh và video<br>• Nhận thông báo khi bạn
+                    bè thích và bình luận về bài viết của bạn<br>• Chơi trò chơi và sử dụng các ứng dụng yêu thích<br>•
+                    Mua và bán tại địa phương trên Facebook Marketplace<br><span id="dots">...</span><span
+                            id="more"><br>Giờ bạn có thể truy cập sớm phiên bản Facebook dành cho Android tiếp theo bằng cách trở thành người dùng thử beta. Tìm hiểu cách thức đăng ký, gửi phản hồi và rời khỏi chương trình tại Trung tâm trợ giúp của chúng tôi: [http://on.fb.me/133NwuP]<br><br>Xảy ra sự cố khi tải xuống hoặc cài đặt ứng dụng? Xem http://bit.ly/GPDownload1<br>Nếu vẫn cần trợ giúp? Vui lòng cho chúng tôi biết thêm về vấn đề. http://bit.ly/invalidpackage<br><br>Facebook chỉ khả dụng đối với người dùng từ 13 tuổi trở lên.<br>Điều khoản dịch vụ: http://m.facebook.com/terms.php.</span>
+                </div>
+                <button id="myBtn" onclick="myFunction()">Đọc thêm</button>
+            </div>
+            <div class="user-vote">
+                <span class="heading">User Rating</span>
+                <!-- user voting -->
+                <div id="rating">
+                    <input id="star5" name="rating" type="radio" value="5"/>
+                    <label class="full" for="star5" title="Awesome - 5 stars"></label>
+
+                    <input id="star4" name="rating" type="radio" value="4"/>
+                    <label class="full" for="star4" title="Pretty good - 4 stars"></label>
+
+                    <input id="star3" name="rating" type="radio" value="3"/>
+                    <label class="full" for="star3" title="Meh - 3 stars"></label>
+
+                    <input id="star2" name="rating" type="radio" value="2"/>
+                    <label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+
+                    <input id="star1" name="rating" type="radio" value="1"/>
+                    <label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                </div>
+                <p style="clear:right">4,1 trung bình dựa trên 254 nhận xét.</p>
+                <hr style="border:3px solid #f1f1f1">
+
+                <div class="row-uservote">
+                    <div class="side">
+                        <div>5 sao</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar-5"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div>150</div>
+                    </div>
+                    <div class="side">
+                        <div>4 sao</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar-4"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div>63</div>
+                    </div>
+                    <div class="side">
+                        <div>3 sao</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar-3"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div>15</div>
+                    </div>
+                    <div class="side">
+                        <div>2 sao</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar-2"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div>6</div>
+                    </div>
+                    <div class="side">
+                        <div>1 sao</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar-1"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div>20</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comment">
+                <form action="/action_page.php">
+                    <div class="form-group">
+                        <h2>Comment</h2>
+                        <label for="comment">Đánh giá của bạn:</label>
+                        <textarea class="form-control" id="comment" name="text" rows="5"></textarea>
+                    </div>
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-3 title-item">
+            <div class="title">
+                <a href="">Đồ uống liên quan</a>
+            </div>
+            <div class="new-games" th:each="product, index:${productRelation}">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img th:alt="${product.name}" th:src="@{'/getimage/'+${product.getImg()}}">
+                        </div>
+                        <div class="flip-card-back">
+                            <h th:text="${product.name}">Messenger</h>
+                            <p class="price" th:text="${product.getPrice().sizeS}">Free</p>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <a href="messenger.html">
+                                <button>Tải Xuống</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <!-- footer -->
+    <div class="footer">
+        <h>
+            Copyright by team D.A.T
+        </h>
+    </div>
+</div>
+
+<script>
+    function myFunction() {
+        var dots = document.getElementById("dots");
+        var moreText = document.getElementById("more");
+        var btnText = document.getElementById("myBtn");
+
+        if (dots.style.display === "none") {
+            dots.style.display = "inline";
+            btnText.innerHTML = "Đọc thêm";
+            moreText.style.display = "none";
+        } else {
+            dots.style.display = "none";
+            btnText.innerHTML = "Thu gọn";
+            moreText.style.display = "inline";
+        }
+    }
+
+    function calcRate(r) {
+        const f = ~~r,//Tương tự Math.floor(r)
+            id = 'star' + f + (r % f ? 'half' : '')
+        id && (document.getElementById(id).checked = !0)
+    }
+</script>
+</body>
+</html>

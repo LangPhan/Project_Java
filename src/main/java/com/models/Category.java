@@ -3,8 +3,11 @@ package com.models;
 import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Category {
@@ -31,7 +34,7 @@ public class Category {
     }
 
     public Set<Product> getProduct() {
-        return product;
+        return product.stream().sorted(Comparator.comparing(Product::getName)).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 

@@ -46,7 +46,10 @@ public class ProductService {
         }
         return productRepository.findAll();
     }
+    public List<Product> findTop6ByCreatedAt(){
+        return productRepository.findTop6ByOrderByCreatedAtDesc();
+    }
     public List<Product> findProductByCategory(Category category){
-        return productRepository.findAllByCategoryIs(category);
+        return productRepository.findProductByCategory(category);
     }
 }

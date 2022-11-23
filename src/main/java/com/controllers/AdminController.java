@@ -45,6 +45,7 @@ public class AdminController {
     @Autowired
     private PriceService priceService;
 
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private Account getLoggedUser(Principal principal){
         return accountRepository.findByUsername(principal.getName()).get();
     }
@@ -72,10 +73,9 @@ public class AdminController {
    @PostMapping("/user/edit/{id}")
    public String postingEdit(@ModelAttribute("user") Account account,
                              @PathVariable("id") Long id){
+        Date date = new Date();
         Optional<Account> accountSaved = accountService.findAccountById(id);
         if(accountSaved.isPresent()){
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            Date date = new Date();
             accountSaved.get().setRole(account.getRole());
             accountSaved.get().setActive(account.isActive());
             accountSaved.get().setUpdateAt(dateFormat.format(date));
@@ -189,13 +189,13 @@ public class AdminController {
                                      @RequestParam(name = "priceM") Double priceM,
                                      @RequestParam(name = "priceL") Double priceL,
                                      @RequestParam(name = "image", defaultValue = "") MultipartFile multipartFile) throws IOException{
-
+        Optional<Product> productSaved = productService.findProductById(product.getId());
         String filename = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         if(!filename.isEmpty()){
-            product.setImg(filename);
+            productSaved.get().setImg(filename);
             UploadFile.uploadFiles(multipartFile, filename);
         }else{
-            product.setImg(productService.findProductById(product.getId()).get().getImg());
+            productSaved.get().setImg(productService.findProductById(product.getId()).get().getImg());
         }
 
         Long idPrice = productService.findProductById(product.getId()).get().getPrice().getId();
@@ -204,9 +204,11 @@ public class AdminController {
             price.get().setSizeS(priceS);
             price.get().setSizeM(priceM);
             price.get().setSizeL(priceL);
-            product.setPrice(price.get());
+            productSaved.get().setPrice(price.get());
         }
-        productService.saveProduct(product);
+        Date date = new Date();
+        productSaved.get().setUpdateAt(dateFormat.format(date));
+        productService.saveProduct(productSaved.get());
        return "redirect:/admin/product";
     }
 //    @PostMapping("product/delete/{id}")
