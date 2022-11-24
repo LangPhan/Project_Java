@@ -27,15 +27,16 @@
     </ul>
 </nav>
 <div align="center">
+<!--    <div><p th:text="${sortField} ${sortDir}"></p></div>-->
         <h1>Danh sách sản phẩm</h1>
         <h4>Thêm sản phẩm mới <a href="/admin/product/add">tại đây</a></h4>
-<!--        <form th:action="'/admin/product/'" method="">-->
-<!--            Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />-->
-<!--            &nbsp;-->
-<!--            <input type="submit" value="Search" />-->
-<!--            &nbsp;-->
-<!--            <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />-->
-<!--        </form>-->
+         <form th:action="@{/admin/product/searching/0}" method="get">
+            Filter: <input type="text" name="keyword" id="keyword" size="50" />
+            &nbsp;
+            <input type="submit" value="Search" />
+            &nbsp;
+            <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+        </form>
         <table class="table" style="width: 80%">
             <thead>
             <tr>
@@ -48,9 +49,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="product, iStat:${products}">
+            <tr th:each="product, iStat:${productsList}">
                 <th scope="row" th:text="${iStat.count}">1</th>
-                <td th:text="${product.getName()}">1</td>
+                <td th:text="${product.name}">1</td>
 <!--                <td th:text="${product.getImg()}">-->
                 <td>
 
@@ -66,28 +67,24 @@
             </tr>
             </tbody>
         </table>
-<!--        <div>-->
-<!--            <a th:if="${currentPage > 1}" th:href="@{'/admin/product/'+${pageNum}}">First</a>-->
-<!--            <span th:unless="${currentPage > 1}">First</span>-->
 
-<!--            <a th:if="${currentPage > 1}" th:href="@{'/admin/product/'+${currentPage -1}}">Previous</a>-->
-<!--            <span th:unless="${currentPage > 1}">Previous</span>-->
-
-<!--            <span th:each="i: ${#numbers.sequence(1, totalPages)}">-->
-<!--            <a th:if="${currentPage != i}" th:href="@{'/admin/product/' + ${i}}" th:text="${i}"></a>-->
-<!--            <span th:unless="${currentPage != i}" th:text="${i}">  </span>-->
-<!--            &nbsp;-->
-<!--        </span>-->
-<!--            <a th:if="${currentPage < totalPages}" th:href="@{'/admin/product/' + ${currentPage + 1}}">Next</a>-->
-<!--            <span th:unless="${currentPage < totalPages}">Next</span>-->
-
-<!--            <a th:if="${currentPage < totalPages}" th:href="@{'/admin/product/' + ${totalPages}}">Last</a>-->
-<!--            <span th:unless="${currentPage < totalPages}">Last</span>-->
-<!--        </div>-->
 </div>
 
+<!--th:classappend="${currentPage == i -1 ? 'active':''}"-->
+
+        <ul class="pagination justify-content-center">
+            <li th:if="${currentPage!=0}" class="page-item">
+                <a th:href="@{'/admin/product/paging/'+${currentPage - 1}}" class="page-link" href="#">Previous</a>
+            </li>
+            <li th:each="i: ${#numbers.sequence(1,totalPages)}"  class="page-item">
+                <a th:href="@{'/admin/product/paging/'+ ${i - 1}}" class="page-link" href="#"><span th:text="${i}"></span></a>
+            </li>
+            <li th:if="${currentPage + 1 != totalPages}" class="page-item">
+                <a th:href="@{'/admin/product/paging/'+ ${currentPage + 1}}" class="page-link" href="#">Next</span></a>
+            </li>
+        </ul>
     <!-- Modal -->
-    <div class="modal fade" th:each="product:${products}" th:attr="id='accountModel'+${product.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" th:each="product:${productsList}" th:attr="id='accountModel'+${product.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
