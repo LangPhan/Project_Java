@@ -106,13 +106,6 @@ public class AdminController {
         return "redirect:/admin/category";
     }
 
-    @GetMapping("/product")
-    public String viewProducts(Model model){
-        List<Product> productList = productService.listProduct();
-        model.addAttribute("products",productList);
-        return "admin/products";
-    }
-
     @GetMapping("/product/paging/{pageNum}")
     public String viewProductsByPaging(Model model,
                                        @PathVariable(name = "pageNum") int pageNum){
@@ -146,7 +139,7 @@ public class AdminController {
     }
 
 
-    @RequestMapping("/")
+    @RequestMapping("/product")
     public String viewHomePage(Model model) {
         return viewProductsByPagingAndSorting(model, 1, "name", "asc");
     }

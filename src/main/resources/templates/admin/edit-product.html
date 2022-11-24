@@ -59,8 +59,8 @@
       <div class="form-group col-md-4">
         <label for="inputState">Loại sản phẩm</label>
         <select name="category" id="inputState" class="form-control" th:disabled="${detail}">
-          <option th:each="category:${categories}" th:text="${category.getName()}" th:value="${category.getId()}"
-          >Choose</option>
+          <option  th:each="category:${categories}" th:text="${category.getName()}" th:value="${category.getId()}"
+                   th:selected="${category_id.get().getId() == category.getId()}">Choose </option>
         </select>
       </div>
     </div>

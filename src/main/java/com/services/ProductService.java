@@ -1,5 +1,6 @@
 package com.services;
 
+import com.models.Category;
 import com.models.Product;
 import com.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,12 @@ public class ProductService {
         Pageable pageable = PageRequest.of(pageNo,5);
         Page<Product> products = productRepository.searchProduct(keyword,pageable);
         return products;
+    }
+    public List<Product> findTop6ByCreatedAt(){
+        return productRepository.findTop6ByOrderByCreatedAtDesc();
+    }
+    public List<Product> findProductByCategory(Category category){
+        return productRepository.findProductByCategory(category);
     }
 
 }
