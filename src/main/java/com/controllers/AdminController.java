@@ -91,7 +91,6 @@ public class AdminController {
         return "admin/users";
     }
 
-
     //CATEGORY MANAGEMENT
     @GetMapping("/category")
     public String getCategory(Model model){
@@ -268,17 +267,17 @@ public class AdminController {
         productService.saveProduct(product);
        return "redirect:/admin/product";
     }
-//    @PostMapping("product/delete/{id}")
-//    public String postingDeleteProduct(@PathVariable("id") Long id, Model model){
-//        if(productService.findProductById(id).isPresent()){
-//            productService.findProductById(id).get().setCategory(null);
-//            productService.findProductById(id).get().setPrice(null);
-//            productService.deleteProductById(id);
-//            model.addAttribute("message","Xóa sản phẩm thành công");
-//            return gettingProduct(model);
-//        }
-//        return gettingProduct(model);
-//    }
+    @PostMapping("product/delete/{id}")
+    public String postingDeleteProduct(@PathVariable("id") Long id, Model model){
+       if(productService.findProductById(id).isPresent()){
+            productService.findProductById(id).get().setCategory(null);
+            productService.findProductById(id).get().setPrice(null);
+            productService.deleteProductById(id);
+            model.addAttribute("message","Xóa sản phẩm thành công");
+            return viewHomePage(model);
+        }
+        return viewHomePage(model);
+    }
 
 
 }

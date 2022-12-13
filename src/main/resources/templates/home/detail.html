@@ -38,7 +38,7 @@
                         <img src="/getimage/drink_icon.png" style="width:50px"> Đồ uống</a>
                     <div class="dropdown-menu">
                         <a th:each="category:${categories}" th:text="${category.getName()}" class="dropdown-item"
-                           href="#">Action</a>
+                           href="#" th:href="@{'/category/'+${category.id}}">Action</a>
                     </div>
                 </li>
                 <li class="nav-item" id="apps">
@@ -86,8 +86,8 @@
         <div class="col-lg-8 ">
             <!-- link -->
             <div class="title">
-                <a href="/">Trang chủ >></a> <a href="apps.html">Apps >></a> <a href="apps.html">Mạng xã hội
-                >></a> <a href="">FaceBook</a>
+                <a href="/">Trang chủ >></a> <a th:href="@{'/category/'+${productDetail.get().getCategory().id}}"
+            th:text="${productDetail.get().getCategory().getName()}">Apps >></a>
             </div>
             <!-- tab content-->
             <div class="tab-content">

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử mua hàng</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!--<script src="https://kit.fontawesome.com/9a81947f10.js" crossorigin="anonymous"></script>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<style>
+    .main{
+        display: flex;
+        justify-content: space-around;
+    }
+    .table{
+        background-color: #fdfdfd;
+    }
+    .payment{
+        float: right;
+        padding-right: 10%;
+    }
+
+</style>
+<body>
+<!-- header -->
+<div class="header">
+    <!-- logo -->
+    <nav class="navbar navbar-expand-md bg-white navbar-light">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/">
+            <img src="/getimage/logo.png" width="210" height="70" style="padding-left: 50px;">
+        </a>
+
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto" th:switch="${account == null}">
+
+                <li class="nav-item dropdown" id="games" style="padding-top: 8px">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        <img src="/getimage/drink_icon.png" style="width:50px"> Đồ uống</a>
+                    <div class="dropdown-menu">
+                        <a th:each="category:${categories}" th:text="${category.getName()}" class="dropdown-item"
+                           href="#" th:href="@{'/category/'+${category.id}}">Action</a>
+                    </div>
+                </li>
+                <li class="nav-item" id="apps">
+                    <a class="nav-link" href="/cart"> <img src="/getimage/basket-cart-icon.png" style="width:50px">Giỏ hàng</a>
+                </li>
+                <li th:case="true" class="nav-item" id="users" style="padding-right: 20px;">
+                    <a class="nav-link" href="/user/login"> <img src="/getimage/user_icon.png" style="width:50px">Đăng
+                        nhập</a>
+                </li>
+                <li th:case="false" class="nav-item dropdown" th:id="users" style="padding-right: 20px;margin-top: 10px">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        <img src="/getimage/user_icon.png" style="width:50px"
+                             th:text="${account.get().username.toUpperCase()}"></a>
+                    <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" th:href="@{'/user/update-info/'+${account.get().id}+'?view=true'}">Tài khoản</a>
+                        <a class="dropdown-item" href="#">Lịch sử mua hàng</a>
+                        <div class="dropdown-divider"></div>
+                        <a th:if="${account.get().getRole()=='ROLE_ADMIN'}" class="dropdown-item" href="/admin" style="color: green">Quản lý</a>
+                        <a class="dropdown-item" href="/user/logout" style="color: red">Đăng xuất</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<!-- main -->
+<div class="main" th:switch="${cart.equals(null)}">
+    <h2 th:case="true">Bạn chưa thêm sản phẩm nào vào giỏ hàng</h2>
+    <table th:case="false" class="table" style="width: 80%">
+            <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Tên sản phẩm</th>
+                <th scope="col">Ảnh</th>
+                <th scope="col">Giá</th>
+                <th scope="col">Số lượng </th>
+                <th colspan="2">Thời gian</th>
+            </tr>
+            </thead>
+            <tbody th:each="items, iStat:${cart}">
+            <tr th:each="item, count:${items.getCartItem()}">
+                <th scope="row" th:text="${count.count}">1</th>
+                <td th:text="${item.getProduct().name}">1</td>
+                <td>
+                    <img th:src="@{'/getimage/'+${item.getProduct().img}}" width="70px" height="70px">
+                </td>
+                <td th:text="${item.price}">1</td>
+                <td th:text="${item.quantity}">1</td>
+                <td th:text="${item.getUpdateAt()}">
+                </td>
+            </tr>
+
+            </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" th:attr="id='payModel'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xác nhận</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Xác nhận thanh toán đơn hàng</p>
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <form method="post" th:action="'/cart/pay/' + ${cart.id}">
+                        <button type="submit" class="btn btn-success" data-toggle="modal">Thanh toán</button>
+                    </form>
+                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+<div class="payment" th:if="${cart.getCartItem() != null}">
+    <p >Tổng tiền: <b th:text="${cart.total.toString().replace('.0',' VND')}"></b> </p>
+    <button type="button" class="btn btn-success" data-toggle="modal" th:attr="data-target='#payModel'+${cart.id}"><a>Thanh toán</a></button>
+</div>-->
+
+<div class="clear"></div>
+<!-- footer -->
+<div class="footer">
+    <h>
+        Copyright by team D.A.T
+    </h>
+</div>
+</body>
+</html>

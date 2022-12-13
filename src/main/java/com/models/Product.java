@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -28,6 +29,9 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PRICE_ID",referencedColumnName = "id")
     private Price price;
+
+    @OneToMany(mappedBy = "product")
+    private Set<CartItem> cartItem;
 
     public Product() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

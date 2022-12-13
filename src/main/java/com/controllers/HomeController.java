@@ -67,4 +67,30 @@ public class HomeController {
         model.addAttribute("productRelation", productsRelation);
         return "home/detail";
     }
+    @GetMapping("/category/{id}")
+    public String getProductCategory(@PathVariable Long id,
+                                     @CookieValue(value = "username", defaultValue = "") String username,
+                                     Model model){
+        Optional<Account> accountSaved = accountRepository.findByUsername(username);
+        List<Category> categories = categoryService.getAllCategories();
+        Optional<Category> categoryName = categoryService.getCategoryById(id);
+        if(!categoryName.isPresent()){
+            return "home/404";
+        }
+        if(!Objects.equals(username, "")){
+            model.addAttribute("account", accountSaved);
+        }else{
+            model.addAttribute("account",null);
+        }
+        List<Product> listProduct = productService.findProductByCategory(categoryName.get());
+        model.addAttribute("categories", categories);
+        model.addAttribute("products",listProduct);
+        model.addAttribute("category", categoryName);
+
+        return "home/category";
+    }
+    @GetMapping("/no-login")
+    public String handleNoLogin(){
+        return "home/404";
+    }
 }

@@ -21,8 +21,6 @@ public class Category {
     private String createdAt;
     @Column(name = "UPDATED_AT", nullable = false)
     private String updateAt;
-
-
     @OneToMany(mappedBy = "category")
     private Set<Product> product;
 

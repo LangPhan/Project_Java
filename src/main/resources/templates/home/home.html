@@ -38,11 +38,11 @@
                         <img src="getimage/drink_icon.png" style="width:50px"> Đồ uống</a>
                     <div class="dropdown-menu">
                         <a th:each="category:${categories}" th:text="${category.getName()}" class="dropdown-item"
-                           href="#">Action</a>
+                           href="#" th:href="@{'/category/'+${category.id}}">Action</a>
                     </div>
                 </li>
                 <li class="nav-item" id="apps">
-                    <a class="nav-link" href="apps.html"> <img src="getimage/basket-cart-icon.png" style="width:50px">Giỏ hàng</a>
+                    <a class="nav-link" href="/cart"> <img src="getimage/basket-cart-icon.png" style="width:50px">Giỏ hàng</a>
                 </li>
                 <li th:case="true" class="nav-item" id="users" style="padding-right: 20px;">
                     <a class="nav-link" href="/user/login"> <img src="getimage/user_icon.png" style="width:50px">Đăng
@@ -54,9 +54,8 @@
                         <img src="getimage/user_icon.png" style="width:50px"
                              th:text="${account.get().username.toUpperCase()}"></a>
                     <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" th:href="@{'/user/update-info/'+${account.get().id}+'?view=true'}">Tài khoản</a>
+                        <a class="dropdown-item" href="#">Lịch sử mua hàng</a>
                         <div class="dropdown-divider"></div>
                         <a th:if="${account.get().getRole()=='ROLE_ADMIN'}" class="dropdown-item" href="/admin" style="color: green">Quản lý</a>
                         <a class="dropdown-item" href="/user/logout" style="color: red">Đăng xuất</a>
@@ -133,14 +132,14 @@
         <div class="col-lg-8 title-item">
             <!-- title games hot -->
             <div class="title">
-                <a href="" th:text="${category.name} +' >>'">Hot Games >></a>
+                <a href="" th:href="@{'/category/'+${category.id}}" th:text="${category.name} +' >>'">Hot Games >></a>
             </div>
             <!-- games hot list -->
             <div class="list-game">
                 <div class="card" th:each="product, indexProduct:${category.getProduct()}" th:if="${indexProduct.index + 1} < 9">
                     <img th:src="@{'/getimage/'+${product.getImg()}}" th:alt="product.name" width="90px" height="90px">
                     <h th:text="${product.name}">Mapple Story M</h>
-                    <p th:text="${product.getPrice().getSizeS()}+' VND'" class="price">Free</p>
+                    <p th:text="${product.price.sizeS} +' VND'" class="price">Free</p>
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star checked"></span>
@@ -149,12 +148,70 @@
                     <div class="but">
 
                         <a th:href="@{'/detail/'+${product.getId()}}"><button style="width: 70%; float: left">Xem chi tiết</button></a>
-                        <button style="width: 30%"><i class="fa fa-shopping-cart fa-th-large" aria-hidden="true"></i></button>
+                        <button data-toggle="modal" th:attr="data-target='#productModel'+${product.id}" style="width: 30%"><i class="fa fa-shopping-cart fa-th-large" aria-hidden="true"></i></button>
                     </div>
                 </div>
                 <p th:if="${category.getProduct().size()<1}" style="align-items: center">Đồ uống đang được chuẩn bị...</p>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" th:each="product, indexProduct:${category.getProduct()}" th:attr="id='productModel'+${product.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm vào giỏ hàng</h5>
+                        <button  type="button" class="addToCart" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post" th:action="'/cart/add/' + ${product.id}">
+                        <div class="modal-body">
+                            <div class="tab-content">
+                                <dt>
+                                    <div class="icon">
+                                        <img th:alt="${product.name}" th:src="@{'/getimage/'+${product.img}}"
+                                        width="80px" height="80px">
+                                    </div>
+                                </dt>
+                                <dd>
+                                    <div class="title-des">
+                                        <h1 th:text="${product.name}">FaceBook</h1>
+                                    </div>
+                                    <div class="price">
+                                        <label>Chọn kích cỡ:</label>
+                                        <div class="price-choose">
+                                            <input type="radio" id="priceS" name="price" th:value="${product.price.sizeS}"
+                                                   checked>
+                                            <label for="priceS" th:text="'Size S: '+${product.price.sizeS}">Huey</label>
+                                        </div>
+
+                                        <div class="price-choose">
+                                            <input type="radio" id="priceM" name="price" th:value="${product.price.sizeM}">
+                                            <label for="priceM" th:text="'Size M: '+${product.price.sizeM}">Dewey</label>
+                                        </div>
+
+                                        <div class="price-choose">
+                                            <input type="radio" id="priceL" name="price" th:value="${product.price.sizeL}">
+                                            <label for="priceL" th:text="'Size L: '+${product.price.sizeL}">Louie</label>
+                                        </div>
+                                        <div class="quantity">
+                                            <label for="quantity">Số lượng</label>
+                                            <input id = "quantity" type="number" name="quantity" value="1">
+                                        </div>
+                                    </div>
+                                </dd>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-success" data-toggle="modal">Thêm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 
         <div class="col-lg-3 title-item" th:if="${index.index + 1} == 1">
             <div class="title">
@@ -167,7 +224,7 @@
                             <img th:src="@{'/getimage/'+${topProduct.img}}" th:alt="${topProduct.name}">
                         </div>
                         <div class="flip-card-back" th:each="topProduct, indexTop :${productTop6th}">
-                            <h th:text="${topProduct.name}">Indentity V</h>
+                            <h th:text="${topProduct.getName()}">Indentity V</h>
                             <p th:text="${topProduct.getPrice().sizeS}" class="price">Free</p>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
@@ -223,5 +280,6 @@
         Copyright by team D.A.T
     </h>
 </div>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

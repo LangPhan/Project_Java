@@ -1,11 +1,11 @@
 package com.services;
 
+import com.models.Account;
 import com.models.User;
 import com.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -28,5 +28,9 @@ public class UserService {
 
     public boolean phoneIsExist(String phone){
         return userRepository.existsUserByPhoneNumber(phone);
+    }
+
+    public Account findAccountByEmail(String email){
+        return userRepository.findByEmail(email).getAccount();
     }
 }

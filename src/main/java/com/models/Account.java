@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -25,7 +26,8 @@ public class Account {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID",referencedColumnName = "id")
     private User user;
-
+    @OneToMany(mappedBy = "account")
+    private Set<Cart> cart;
     public Account() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
@@ -95,5 +97,13 @@ public class Account {
     }
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Cart> getCart() {
+        return cart;
+    }
+
+    public void setCart(Set<Cart> cart) {
+        this.cart = cart;
     }
 }
