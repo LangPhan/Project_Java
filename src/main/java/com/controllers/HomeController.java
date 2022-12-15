@@ -8,10 +8,7 @@ import com.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +35,14 @@ public class HomeController {
         Optional<Account> accountSaved = accountRepository.findByUsername(username);
         List<Category> categories = categoryService.getAllCategories();
         List<Product> productsTop6th = productService.findTop6ByCreatedAt();
+        if(accountSaved.isPresent()) {
+            if (accountSaved.get().getRole().equals("ROLE_ADMIN")) {
+                return "redirect:/admin";
+            }
+            if (accountSaved.get().getRole().equals("ROLE_EMPLOYEE")) {
+                return "redirect:/employee";
+            }
+        }
         if(!Objects.equals(username, "")){
             model.addAttribute("account", accountSaved);
         }else{
@@ -88,6 +93,22 @@ public class HomeController {
         model.addAttribute("category", categoryName);
 
         return "home/category";
+    }
+    @GetMapping("/search")
+    public String getSearch(@CookieValue(value = "username", defaultValue = "") String username,
+                            Model model, @RequestParam(name = "keyword") String keyword){
+        Optional<Account> accountSaved = accountRepository.findByUsername(username);
+        List<Category> categories = categoryService.getAllCategories();
+        List<Product> products = productService.searchProductByKeyword(keyword);
+        if(!Objects.equals(username, "")){
+            model.addAttribute("account", accountSaved);
+        }else{
+            model.addAttribute("account",null);
+        }
+        model.addAttribute("categories", categories);
+        model.addAttribute("products", products);
+        model.addAttribute("keyword", keyword);
+        return "home/search";
     }
     @GetMapping("/no-login")
     public String handleNoLogin(){

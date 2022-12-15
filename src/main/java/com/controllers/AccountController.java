@@ -88,14 +88,21 @@ public class AccountController {
     public String getUpdateInfo(Model model, @PathVariable String id,
                                 @CookieValue(value = "username", defaultValue = "") String username){
         Optional<Account> account = accountRepository.findByUsername(username);
-        if(account.get().getId() != Long.parseLong(id)){
-            return "redirect:/user/update-info/"+account.get().getId();
+        if(account.isPresent()){
+            if(account.get().getId() != Long.parseLong(id)){
+                return "redirect:/user/update-info/"+account.get().getId();
+            }
         }
-        User user = new User();
+        User user;
+        if(account.get().getUser() == null){
+             user = new User();
+        }else{
+             user = account.get().getUser();
+        }
         if(model.containsAttribute("user_exist")){
             model.addAttribute("user_exits",model.getAttribute("user_exist"));
         }else{
-            model.addAttribute("user_exits",account.get().getUser());
+            account.ifPresent(value -> model.addAttribute("user_exits", value.getUser()));
         }
         model.addAttribute(user);
         return "users/update-info";
@@ -106,30 +113,50 @@ public class AccountController {
                                  @CookieValue(value = "username", defaultValue = "") String username){
         model.addAttribute("user_exist", user);
         Optional<Account> account = accountRepository.findByUsername(username);
-        if(account.get().getId() != Long.parseLong(id)){
-            return "redirect:/user/update-info/"+account.get().getId();
+        if(account.isPresent()){
+            if(account.get().getId() != Long.parseLong(id)){
+                return "redirect:/user/update-info/"+account.get().getId();
+            }
         }
         if(user.getEmail().isEmpty()||user.getPhoneNumber().isEmpty()){
             model.addAttribute("message","Vui lòng điền đầy đủ email và số điện thoại");
             return getUpdateInfo(model, id, username);
         }
-        if(userService.emailIsExist(user.getEmail()) && !Objects.equals(user.getEmail(), userService.findUserById(Long.parseLong(id)).get().getEmail())){
-            model.addAttribute("message","Email đã tồn tại. Vui lòng sử dụng email khác");
-            return getUpdateInfo(model, id, username);
+        if(account.get().getUser() == null){
+            if(userService.emailIsExist(user.getEmail())){
+                model.addAttribute("message","Email đã tồn tại. Vui lòng sử dụng email khác");
+                return getUpdateInfo(model, id, username);
+            }
+            if(userService.phoneIsExist(user.getPhoneNumber())){
+                model.addAttribute("message",
+                        "Số điện thoại đã được đăng kí. Vui lòng sử dụng số điện thoại khác khác");
+                return getUpdateInfo(model, id, username);
+            }
         }
-        if(userService.phoneIsExist(user.getPhoneNumber())
-                && !Objects.equals(user.getPhoneNumber(), userService.findUserById(Long.parseLong(id)).get().getPhoneNumber())){
-            model.addAttribute("message",
-                    "Số điện thoại đã được đăng kí. Vui lòng sử dụng số điện thoại khác khác");
-            return getUpdateInfo(model, id, username);
+        else{
+            if(userService.emailIsExist(user.getEmail()) && !account.get().getUser().getEmail().equals(user.getEmail())){
+                model.addAttribute("message","Email đã tồn tại. Vui lòng sử dụng email khác");
+                return getUpdateInfo(model, id, username);
+            }
+            if(userService.phoneIsExist(user.getPhoneNumber()) && !account.get().getUser().getPhoneNumber().equals(user.getPhoneNumber())){
+                model.addAttribute("message",
+                        "Số điện thoại đã được đăng kí. Vui lòng sử dụng số điện thoại khác khác");
+                return getUpdateInfo(model, id, username);
+            }
+            User user1 = account.get().getUser();
+            if(user1.getFullName().equals(user.getFullName()) && user1.getEmail().equals(user.getEmail())
+                    && user1.getPhoneNumber().equals(user.getPhoneNumber()) && user1.getAddress().equals(user.getAddress())){
+                return "redirect:/";
+            }
         }
+
         if(user.getPhoneNumber().length() != 10){
             model.addAttribute("message",
                     "Số điện thoại không đúng. Vui lòng kiểm tra lại");
             return getUpdateInfo(model, id, username);
         }
-        account.get().setUser(user);
-        accountRepository.save(account.get());
+            account.get().setUser(user);
+            accountRepository.save(account.get());
         return "redirect:/";
     }
     @GetMapping("/login")
@@ -200,8 +227,7 @@ public class AccountController {
 
         Cookie acc = new Cookie("acc", account.getUsername());
         acc.setMaxAge(60*60*24);
-        acc.setPath("/user/typecode");
-        acc.setPath("/user/renewpass");
+        acc.setPath("/");
         response.addCookie(acc);
         return "users/confirm";
     }
@@ -226,7 +252,7 @@ public class AccountController {
         return "users/renewpass";
     }
     @PostMapping("/renewpass")
-    public String postRenewPass(@CookieValue(name = "acc") String username,
+    public String postRenewPass(@CookieValue(name = "acc", defaultValue = "") String username,
                                 @RequestParam(name = "password") String password,
                                 @RequestParam(name="re-password") String rePassword,Model model){
         if(password.length() < 8){

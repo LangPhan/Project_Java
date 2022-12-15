@@ -9,7 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!--<script src="https://kit.fontawesome.com/9a81947f10.js" crossorigin="anonymous"></script>-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -69,7 +68,7 @@
                              th:text="${account.get().username.toUpperCase()}"></a>
                     <div class="dropdown-menu" style="">
                         <a class="dropdown-item" th:href="@{'/user/update-info/'+${account.get().id}+'?view=true'}">Tài khoản</a>
-                        <a class="dropdown-item" href="#">Lịch sử mua hàng</a>
+                        <a class="dropdown-item" href="/cart/history">Lịch sử mua hàng</a>
                         <div class="dropdown-divider"></div>
                         <a th:if="${account.get().getRole()=='ROLE_ADMIN'}" class="dropdown-item" href="/admin" style="color: green">Quản lý</a>
                         <a class="dropdown-item" href="/user/logout" style="color: red">Đăng xuất</a>
@@ -81,6 +80,19 @@
 </div>
 <!-- main -->
 <div class="main" th:switch="${cart.getCartItem() == null}">
+
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay ="2000" th:hidden="!${message}">
+        <div class="toast-header">
+            <strong class="mr-auto">Thông báo</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" th:text="${message}">
+        </div>
+    </div>
+
+
     <h2 th:case="true">Bạn chưa thêm sản phẩm nào vào giỏ hàng</h2>
     <table th:case="false" class="table" style="width: 80%">
             <thead>
@@ -192,23 +204,39 @@
     <!-- Modal -->
     <div class="modal fade" th:attr="id='payModel'+${cart.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Xác nhận</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Xác nhận thanh toán đơn hàng</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <form method="post" th:action="'/cart/pay/' + ${cart.id}">
+            <form method="post" th:action="'/cart/pay/' + ${cart.id}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Xác nhận</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p style="text-align: center; font-size: 24px">THÔNG TIN NHẬN HÀNG</p>
+                        <div class="form-group">
+                            <label for="username">Tên người dùng:</label>
+                            <input th:value="${user_exits}? ${user_exits.fullName}: ''" type="text" class="form-control" placeholder="Nhập tên người dùng" id="username" name="fullName">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại:</label>
+                            <input th:value="${user_exits}? ${user_exits.phoneNumber}: ''" type="tel" class="form-control" placeholder="Nhập số điện thoại" id="phone" name="phoneNumber">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Địa chỉ:</label>
+                            <input th:value="${user_exits}? ${user_exits.address}: ''" type="text" class="form-control" placeholder="Nhập địa chỉ của bạn" id="address" name="address">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Nhập email:</label>
+                            <input th:value="${user_exits}? ${user_exits.email}: ''" type="email" class="form-control" placeholder="Nhập email của bạn" id="email" name="email">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-success" data-toggle="modal">Thanh toán</button>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -227,4 +255,9 @@
     </h>
 </div>
 </body>
+<script>
+    $(document).ready(function (){
+        $(".toast").toast("show")
+    })
+</script>
 </html>

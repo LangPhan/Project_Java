@@ -10,8 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -30,21 +33,6 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-//    public Page<Product> listAll(int page, String sortField, String sortDir,String keyword) {
-//        Sort sort = Sort.by(sortField);
-//        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-//
-//        Pageable pageable = PageRequest.of(page - 1, 7, sort); // 7 rows per page
-//
-//        if (keyword != null) {
-//            return productRepository.findByNameContaining(keyword,pageable);
-//        }
-//        return productRepository.findAll(pageable);
-//    }
-
-//    public Page<Product> findAll(Pageable page){
-//        return findAll(page);
-//    }
 
     public List<Product> listProduct(){
         return (List<Product>) productRepository.findAll();
@@ -56,27 +44,35 @@ public class ProductService {
         return page;
     }
 
-    public Page<Product> pageProductsandSort(int pageNo,String sortField,String sortDir ){
+    public Page<Product> pageProductsandSort(int pageNo,String sortField,String sortDir, String keyword){
 
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNo, pageSize,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending()
                         : Sort.by(sortField).descending()
         );
-
+        if(!Objects.equals(keyword, "")){
+            Page<Product> products = productRepository.searchProduct(keyword, pageable);
+            System.out.println("here");
+            return products;
+        }
         return productRepository.findAll(pageable);
     }
 
     public Page<Product> searchProduct(int pageNo,String keyword){
         Pageable pageable = PageRequest.of(pageNo,5);
-        Page<Product> products = productRepository.searchProduct(keyword,pageable);
+        Page<Product> products = productRepository.searchProduct(keyword, pageable);
         return products;
+    }
+    public List<Product> searchProductByKeyword(String keyword){
+        return productRepository.searchProductByKeyword(keyword);
     }
     public List<Product> findTop6ByCreatedAt(){
         return productRepository.findTop6ByOrderByCreatedAtDesc();
     }
     public List<Product> findProductByCategory(Category category){
-        return productRepository.findProductByCategory(category);
+        return productRepository.findProductByCategory(category).stream()
+                .sorted((p1,p2) -> p1.getPrice().getSizeS() < p2.getPrice().getSizeS() ? 1 : 0)
+                .collect(Collectors.toList());
     }
-
 }

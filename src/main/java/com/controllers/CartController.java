@@ -5,12 +5,14 @@ import com.models.*;
 import com.repositories.AccountRepository;
 import com.repositories.CartRepository;
 import com.services.*;
+import com.utils.SendEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("cart")
@@ -29,11 +31,16 @@ public class CartController {
     private CartService cartService;
     @Autowired
     private CartItemService cartItemService;
+    @Autowired
+    private ReceiptService receiptService;
+    @Autowired
+    private SendEmail sendEmail;
 
     @GetMapping("")
     public String getCart(@CookieValue(value = "username", defaultValue = "") String username, Model model){
         Optional<Account> accountSaved = accountRepository.findByUsername(username);
         List<Category> categories = categoryService.getAllCategories();
+        Optional<Account> account = accountRepository.findByUsername(username);
         Cart cart = cartService.findCartIsOrdering(cartService.findAllCart(), accountSaved.get());
         if(!Objects.equals(username, "")){
             model.addAttribute("account", accountSaved);
@@ -42,6 +49,7 @@ public class CartController {
         }
         model.addAttribute("categories", categories);
         model.addAttribute("cart",cart);
+        model.addAttribute("user_exits",account.get().getUser());
         return "home/cart";
     }
 
@@ -76,18 +84,40 @@ public class CartController {
     }
     @PostMapping("/pay/{id}")
     public String postPayment(@PathVariable Long id,
-                              @CookieValue(value = "username", defaultValue = "") String username){
+                              @CookieValue(value = "username", defaultValue = "") String username,
+                              @RequestParam(name = "fullName")String fullName,
+                              @RequestParam(name = "phoneNumber") String phoneNumber,
+                              @RequestParam(name = "address") String address,
+                              @RequestParam(name = "email") String email,
+                              Model model){
         Optional<Account> account_saved = accountService.findAccountByUsername(username);
         Cart cart = cartService.findCartIsOrdering(cartService.findAllCart(), account_saved.get());
         cart.setStatus(CartConstant.ORDERED);
         cartService.save(cart);
-        return "redirect:/";
+        Receipt newReceipt = new Receipt();
+        newReceipt.setAddress(address);
+        newReceipt.setEmail(email);
+        newReceipt.setFullName(fullName);
+        newReceipt.setPhoneNumber(phoneNumber);
+        newReceipt.setCart(cart);
+        receiptService.save(newReceipt);
+        model.addAttribute("message", "Thanh toán thành công");
+        String msg = "Người đặt hàng: "+username+"\n"
+                +"Số điện thoại: "+ phoneNumber+"\n"
+                +"Địa chỉ: "+address+"\n"
+                +"Tổng tiền thanh toán: "+cart.getTotal()+" VND\n"
+                +"Sản phẩm sẽ được giao cho bạn sớm thôi!";
+        sendEmail.sendSimpleMail(email,"Thanh toán đơn hàng thành công",msg);
+        return getCart(username,model);
     }
     @GetMapping("/history")
     public String getHistory(@CookieValue(value = "username", defaultValue = "") String username, Model model){
         Optional<Account> accountSaved = accountRepository.findByUsername(username);
         List<Category> categories = categoryService.getAllCategories();
         List<Cart> cart = cartService.findAllIsOrdered(cartService.findAllCart(), accountSaved.get());
+        cart =  cart.stream()
+                .sorted(Comparator.comparing(Cart::getUpdateAt).reversed())
+                .collect(Collectors.toList());
         if(!Objects.equals(username, "")){
             model.addAttribute("account", accountSaved);
         }else{
@@ -95,7 +125,6 @@ public class CartController {
         }
         model.addAttribute("categories", categories);
         model.addAttribute("cart",cart);
-        model.addAttribute("counts", 0);
         return "home/history";
     }
     @PostMapping("/delete/{id}")

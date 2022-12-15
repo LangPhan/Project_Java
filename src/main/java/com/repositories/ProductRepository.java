@@ -17,7 +17,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p")
     Page<Product> pageProduct(Pageable pageable);
-//    public List<Product> findAll(String keyword);
+
+    @Query("SELECT p FROM Product p WHERE p.name LIKE %?1%")
+    List<Product> searchProductByKeyword(String keyword);
     List<Product> findProductByCategory(Category category);
     List<Product> findTop6ByOrderByCreatedAtDesc();
 

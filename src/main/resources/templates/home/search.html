@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${category.get().name}"></title>
+  <title>Tìm kiếm</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -85,10 +85,11 @@
     <div class="col-lg-8 title-item">
       <!-- title games hot -->
       <div class="title">
-        <a href="" th:text="${category.get().name} +' >>'">Hot Games >></a>
+        <a href="" th:text="'Kết quả tìm kiếm : ' +${keyword}">Hot Games >></a>
       </div>
       <!-- games hot list -->
       <div class="list-game">
+        <p th:if="${products.size() == 0}" th:text="'Không có kết quả nào cho từ khóa ' + ${keyword}"></p>
         <div class="card" th:each="product, indexProduct:${products}">
           <img th:src="@{'/getimage/'+${product.getImg()}}" th:alt="product.name" width="90px" height="90px">
           <h th:text="${product.name}">Mapple Story M</h>
@@ -102,7 +103,6 @@
             <a th:href="@{'/detail/'+${product.getId()}}"><button style="width: 70%; float: left">Xem chi tiết</button></a>
             <button data-toggle="modal" th:attr="data-target='#productModel'+${product.id}" style="width: 30%"><i class="fa fa-shopping-cart fa-th-large" aria-hidden="true"></i></button>
           </div>
-
         </div>
       </div>
     </div>
@@ -161,7 +161,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 

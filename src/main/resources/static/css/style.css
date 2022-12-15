@@ -78,6 +78,9 @@ ul li a{
 .search{
     margin-top: 10px;
 }
+.search2{
+    margin-left: 10px;
+}
 /* style hotkey */
 .hot a{
     display: inline-block;
@@ -311,7 +314,10 @@ div.flip-card button:hover{
     line-height: 50px;
     text-align: center;
     background: #f2f5f9;
+    display: flex;
+    justify-content: center;
 }
+
 
 /* responsive */
 @media screen and (max-width:1000px){

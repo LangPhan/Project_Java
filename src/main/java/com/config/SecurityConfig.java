@@ -28,8 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/user/**","/js/**", "/css/**").permitAll();
-        http.authorizeRequests().antMatchers("/user/admin/**").access("hasAuthority('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/","/user/**","/js/**", "/css/**").permitAll();
+        http.authorizeRequests().antMatchers("/admin/**").access("hasAuthority('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/employees/**").access("hasAnyAuthority('ROLE_ADMIN','ROLE_EMPLOYEE')");
         http.authorizeRequests().antMatchers("/cart/**").access("hasAnyAuthority('ROLE_ADMIN','ROLE_EMPLOYEE','ROLE_USER')").and().exceptionHandling().accessDeniedPage("/no-login");
        /* http.authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER");*/
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/user/404");
@@ -40,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureForwardUrl("/user/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .and().logout().logoutUrl("/user/logout").logoutSuccessUrl("/user/login").deleteCookies("username")
+                .and().logout().logoutUrl("/user/logout").logoutSuccessUrl("/user/login").deleteCookies("username").deleteCookies("acc")
                 .and().rememberMe().tokenValiditySeconds(7 * 24 * 60 * 60).key("this_is_key");
     }
 

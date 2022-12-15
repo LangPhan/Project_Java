@@ -3,8 +3,11 @@ package com.models;
 import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Account {
@@ -100,7 +103,7 @@ public class Account {
     }
 
     public Set<Cart> getCart() {
-        return cart;
+        return cart.stream().sorted(Comparator.comparing(Cart::getCreatedAt)).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public void setCart(Set<Cart> cart) {

@@ -9,7 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!--<script src="https://kit.fontawesome.com/9a81947f10.js" crossorigin="anonymous"></script>-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -55,7 +54,7 @@
                              th:text="${account.get().username.toUpperCase()}"></a>
                     <div class="dropdown-menu" style="">
                         <a class="dropdown-item" th:href="@{'/user/update-info/'+${account.get().id}+'?view=true'}">Tài khoản</a>
-                        <a class="dropdown-item" href="#">Lịch sử mua hàng</a>
+                        <a class="dropdown-item" href="/cart/history">Lịch sử mua hàng</a>
                         <div class="dropdown-divider"></div>
                         <a th:if="${account.get().getRole()=='ROLE_ADMIN'}" class="dropdown-item" href="/admin" style="color: green">Quản lý</a>
                         <a class="dropdown-item" href="/user/logout" style="color: red">Đăng xuất</a>
@@ -91,22 +90,22 @@
         <!-- Search -->
         <div class="col-lg-3 title-item">
             <div class="search">
-                <form action="" method="GET" class="form-inline">
+                <form action="/search" method="GET" class="form-inline">
                     <h style="color: rgb(33, 202, 33); font-weight: bold; font-size:18px ; margin-bottom:8px">Bạn Cần
                         Tìm Gì?
                     </h>
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
             <!-- hot keys -->
             <div class="hot">
-                <a href="">Trà sữa</a>
-                <a href="">Cafe</a>
-                <a href="">Trà đào</a>
-                <a href="">Lien Quan</a>
-                <a href="">Free Fire</a>
-                <a href="">Cap Cut</a>
+                <a href="search/?keyword=Trà+sữa">Trà sữa</a>
+                <a href="search/?keyword=cà+phê">Cafe</a>
+                <a href="search/?keyword=Trà+đào">Trà đào</a>
+                <a href="search/?keyword=Cà+phê+sữa">Cafe sữa</a>
+                <a href="">Trà sữa trân châu</a>
+                <a href="">Sinh tố</a>
             </div>
             <!-- banner QC -->
             <div class="bannerQC" id="bannerQC">
@@ -224,20 +223,16 @@
                             <img th:src="@{'/getimage/'+${topProduct.img}}" th:alt="${topProduct.name}">
                         </div>
                         <div class="flip-card-back" th:each="topProduct, indexTop :${productTop6th}">
-                            <h th:text="${topProduct.getName()}">Indentity V</h>
-                            <p th:text="${topProduct.getPrice().sizeS}" class="price">Free</p>
+                            <h th:text="${topProduct.name}">Indentity V</h>
+                            <p th:text="${topProduct.price.sizeS}" class="price">Free</p>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
-                            <a>
-                                <button>Tải Xuống</button>
-                            </a>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -259,10 +254,6 @@
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
-                            <a>
-                                <button>Tải Xuống</button>
-                                <span class="fa fa-star checked"></span>
-                            </a>
                         </div>
                     </div>
                 </div>

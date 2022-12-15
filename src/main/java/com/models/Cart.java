@@ -26,7 +26,8 @@ public class Cart {
     private String updateAt;
     @OneToMany(mappedBy = "cart")
     private Set<CartItem> cartItem;
-
+    @OneToOne(mappedBy = "cart")
+    private Receipt receipt;
     public Cart() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
@@ -89,5 +90,13 @@ public class Cart {
 
     public void setCartItem(Set<CartItem> cartItem) {
         this.cartItem = cartItem;
+    }
+
+    public Receipt getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(Receipt receipt) {
+        this.receipt = receipt;
     }
 }

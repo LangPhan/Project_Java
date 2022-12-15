@@ -23,7 +23,6 @@ public class SendEmail{
             // Creating a simple mail message
             SimpleMailMessage mailMessage
                     = new SimpleMailMessage();
-
             // Setting up necessary details
             mailMessage.setFrom(sender);
             mailMessage.setTo(to);

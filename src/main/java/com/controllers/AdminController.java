@@ -122,8 +122,9 @@ public class AdminController {
     public String viewProductsByPagingAndSorting(Model model,
                                        @PathVariable(name = "pageNum") int pageNum,
                                                  @Param("sortField") String sortField,
-                                                 @Param("sortDir") String sortDir){
-        Page<Product> products = productService.pageProductsandSort(pageNum,sortField,sortDir);
+                                                 @Param("sortDir") String sortDir,
+                                                 @Param("keyword") String keyword){
+        Page<Product> products = productService.pageProductsandSort(pageNum,sortField,sortDir,keyword);
 
         List<Product> listProducts = products.getContent();
         model.addAttribute("sortField", sortField);
@@ -133,16 +134,16 @@ public class AdminController {
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("productsList", products); // next bc of thymeleaf we make the index.html
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
+        model.addAttribute("keyword", keyword);
         return "admin/productsPaging";
     }
 
 
     @RequestMapping("/product")
     public String viewHomePage(Model model) {
-        return viewProductsByPagingAndSorting(model, 1, "name", "asc");
+        return "redirect:/admin/product/pagingandsort/0?sortField=name&sortDir=asc";
     }
-    @GetMapping("/product/searching/{pageNum}")
+/*    @GetMapping("/product/searching/{pageNum}")
     public String searchProducts(Model model,
                                        @RequestParam("keyword") String keyword,
                                        @PathVariable(name = "pageNum") int pageNum){
@@ -152,42 +153,9 @@ public class AdminController {
         model.addAttribute("totalPages", products.getTotalPages());
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("productsList", products); // next bc of thymeleaf we make the index.html
-
+        model.addAttribute("keyword", keyword);
         return "admin/productsPaging";
-    }
-
-
-    //PRODUCT MANAGEMENT
-//    @GetMapping("/product/{pageNum}")
-//    public String listByPage(Model model,
-//                                 @PathVariable(name = "pageNum") int pageNum,
-//                                        @Param("sortDir") page,
-//                                        @Param("sortField") Optional<Integer> size,
-//                                        @RequestParam(value = "keyword", required = false) String keyword){
-////        int currentPage = page.orElse(1);
-////        int pageSize = size.orElse(5);
-//
-//        Pageable pageable = PageRequest.of(currentPage,pageSize);
-//
-////        Page<Product> resultPage = null;
-////        if(StringUtils.hasText(keyword)){
-////            resultPage = productService.findAllNameContaining(keyword,pageable);
-////            model.addAttribute("keyword",keyword);
-////        }else{
-////            resultPage = productService.findAll(pageable);
-////        }
-////        int totalPages = resultPage.getTotalPages();
-//        List<Product> listProducts = page.getContent();
-//        model.addAttribute("products", listProducts);
-//        model.addAttribute("currentPage", pageNum);
-//        model.addAttribute("totalPages", page.getTotalPages());
-//        model.addAttribute("totalItems", page.getTotalElements());
-//        model.addAttribute("sortField",sortField);
-//        model.addAttribute("sortDir", sortDir);
-//        model.addAttribute("keyword", keyword);
-//        model.addAttribute("reverseSortDir",sortDir.equals("asc")?"desc":"asc");
-//        return "admin/products";
-//    }
+    }*/
 
 
     @GetMapping("product/add")

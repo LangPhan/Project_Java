@@ -17,6 +17,8 @@
     .main{
         display: flex;
         justify-content: space-around;
+        flex-direction: column;
+        align-items: center;
     }
     .table{
         background-color: #fdfdfd;
@@ -81,31 +83,31 @@
 </div>
 <!-- main -->
 <div class="main" th:switch="${cart.equals(null)}">
+    <h2 style="text-align: center">------Lịch sử mua hàng--------</h2>
     <h2 th:case="true">Bạn chưa thêm sản phẩm nào vào giỏ hàng</h2>
     <table th:case="false" class="table" style="width: 80%">
             <thead>
-            <tr>
-                <th scope="col">STT</th>
-                <th scope="col">Tên sản phẩm</th>
-                <th scope="col">Ảnh</th>
-                <th scope="col">Giá</th>
-                <th scope="col">Số lượng </th>
-                <th colspan="2">Thời gian</th>
-            </tr>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col">Ảnh</th>
+                    <th scope="col">Giá</th>
+                    <th scope="col">Số lượng </th>
+                </tr>
             </thead>
             <tbody th:each="items, iStat:${cart}">
-            <tr th:each="item, count:${items.getCartItem()}">
-                <th scope="row" th:text="${count.count}">1</th>
-                <td th:text="${item.getProduct().name}">1</td>
-                <td>
-                    <img th:src="@{'/getimage/'+${item.getProduct().img}}" width="70px" height="70px">
-                </td>
-                <td th:text="${item.price}">1</td>
-                <td th:text="${item.quantity}">1</td>
-                <td th:text="${item.getUpdateAt()}">
-                </td>
-            </tr>
-
+                <tr>
+                    <th colspan="6" th:text="'Thời gian:   '+${items.getUpdateAt()}"></th>
+                </tr>
+                <tr th:each="item, count:${items.getCartItem()}">
+                    <th scope="row" th:text="${count.count}">1</th>
+                    <td th:text="${item.getProduct().name}">1</td>
+                    <td>
+                        <img th:src="@{'/getimage/'+${item.getProduct().img}}" width="70px" height="70px">
+                    </td>
+                    <td th:text="${item.price}">1</td>
+                    <td th:text="${item.quantity}">1</td>
+                </tr>
             </tbody>
     </table>
 
@@ -122,21 +124,10 @@
                 <div class="modal-body">
                     <p>Xác nhận thanh toán đơn hàng</p>
                 </div>
-                <!--<div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <form method="post" th:action="'/cart/pay/' + ${cart.id}">
-                        <button type="submit" class="btn btn-success" data-toggle="modal">Thanh toán</button>
-                    </form>
-                </div>-->
             </div>
         </div>
     </div>
 </div>
-<!--
-<div class="payment" th:if="${cart.getCartItem() != null}">
-    <p >Tổng tiền: <b th:text="${cart.total.toString().replace('.0',' VND')}"></b> </p>
-    <button type="button" class="btn btn-success" data-toggle="modal" th:attr="data-target='#payModel'+${cart.id}"><a>Thanh toán</a></button>
-</div>-->
 
 <div class="clear"></div>
 <!-- footer -->
