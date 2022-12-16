@@ -29,13 +29,13 @@
 <div align="center">
         <h1>Danh sách sản phẩm</h1>
         <h4>Thêm sản phẩm mới <a href="/admin/product/add">tại đây</a></h4>
-<!--        <form th:action="'/admin/product/'" method="">-->
-<!--            Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />-->
-<!--            &nbsp;-->
-<!--            <input type="submit" value="Search" />-->
-<!--            &nbsp;-->
-<!--            <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />-->
-<!--        </form>-->
+        <form th:action="'/admin/product/search'" method="get">
+            Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" />
+            &nbsp;
+            <input type="submit" value="Search" />
+            &nbsp;
+            <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+        </form>
         <table class="table" style="width: 80%">
             <thead>
             <tr>
@@ -50,7 +50,7 @@
             <tbody>
             <tr th:each="product, iStat:${products}">
                 <th scope="row" th:text="${iStat.count}">1</th>
-                <td th:text="${product.getName()}">1</td>
+                <td ><a th:text="${product.getName()}" th:href="@{'/admin/product/detail/' + ${product.id}}">Chi tiết</a></td>
 <!--                <td th:text="${product.getImg()}">-->
                 <td>
 
@@ -59,31 +59,13 @@
                 </td>
                 <td th:text="${product.getCreatedAt()}">1</td>
                 <td th:text="${product.getUpdateAt()}">1</td>
-                <td><button type="button" class="btn btn-success"><a th:href="@{'/admin/product/detail/' + ${product.id}}">Chi tiết</a></button>
+                <td>
                     <button type="button" class="btn btn-warning"><a th:href="@{'/admin/product/edit/' + ${product.id}}">Chỉnh sửa</a></button>
                     <button type="button" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#accountModel'+${product.id}" ><a>Xóa</a></button>
                 </td>
             </tr>
             </tbody>
         </table>
-<!--        <div>-->
-<!--            <a th:if="${currentPage > 1}" th:href="@{'/admin/product/'+${pageNum}}">First</a>-->
-<!--            <span th:unless="${currentPage > 1}">First</span>-->
-
-<!--            <a th:if="${currentPage > 1}" th:href="@{'/admin/product/'+${currentPage -1}}">Previous</a>-->
-<!--            <span th:unless="${currentPage > 1}">Previous</span>-->
-
-<!--            <span th:each="i: ${#numbers.sequence(1, totalPages)}">-->
-<!--            <a th:if="${currentPage != i}" th:href="@{'/admin/product/' + ${i}}" th:text="${i}"></a>-->
-<!--            <span th:unless="${currentPage != i}" th:text="${i}">  </span>-->
-<!--            &nbsp;-->
-<!--        </span>-->
-<!--            <a th:if="${currentPage < totalPages}" th:href="@{'/admin/product/' + ${currentPage + 1}}">Next</a>-->
-<!--            <span th:unless="${currentPage < totalPages}">Next</span>-->
-
-<!--            <a th:if="${currentPage < totalPages}" th:href="@{'/admin/product/' + ${totalPages}}">Last</a>-->
-<!--            <span th:unless="${currentPage < totalPages}">Last</span>-->
-<!--        </div>-->
 </div>
 
     <!-- Modal -->
@@ -136,7 +118,7 @@
 
 <script type="text/javascript">
     function clearSearch() {
-        window.location = "/admin/product";
+        window.location = "/admin/product/pagingandsort/0?sortField=name&sortDir=asc";
     }
 </script>
 </html>

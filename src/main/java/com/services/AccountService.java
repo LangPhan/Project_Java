@@ -33,4 +33,8 @@ public class AccountService {
     public void deleteAccount(long id){
         accountRepository.deleteById(id);
     }
+
+    public List<Account> search(String keyword){
+        return accountRepository.searchAccount(keyword);
+    }
 }

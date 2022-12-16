@@ -28,6 +28,13 @@
   </nav>
 <div align="center">
   <h1>Danh sách người dùng</h1>
+  <form action="/admin/user/search" method="get">
+    Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}"/>
+    &nbsp;
+    <input type="submit" value="Search" />
+    &nbsp;
+    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+  </form>
   <table class="table" style="width: 80%">
     <thead>
     <tr>
@@ -85,4 +92,9 @@
     color: white;
   }
 </style>
+<script type="text/javascript">
+  function clearSearch() {
+    window.location = "/admin/user";
+  }
+</script>
 </html>

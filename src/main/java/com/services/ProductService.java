@@ -46,14 +46,13 @@ public class ProductService {
 
     public Page<Product> pageProductsandSort(int pageNo,String sortField,String sortDir, String keyword){
 
-        int pageSize = 5;
+        int pageSize = 4;
         Pageable pageable = PageRequest.of(pageNo, pageSize,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending()
                         : Sort.by(sortField).descending()
         );
         if(!Objects.equals(keyword, "")){
             Page<Product> products = productRepository.searchProduct(keyword, pageable);
-            System.out.println("here");
             return products;
         }
         return productRepository.findAll(pageable);

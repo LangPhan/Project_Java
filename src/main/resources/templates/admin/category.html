@@ -44,7 +44,7 @@
                 <td th:text="${category.getCreatedAt()}">1</td>
                 <td th:text="${category.getUpdateAt()}">1</td>
                 <td>
-                    <button type="button" class="btn btn-success"><a th:href="@{'/admin/userlist/edit/' + ${category.id}}">Chỉnh sửa</a></button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" th:attr="data-target='#editModel'+${category.id}" ><a>Chỉnh sửa</a></button>
                     <button type="button" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#accountModel'+${category.id}" ><a>Xóa</a></button>
                 </td>
             </tr>
@@ -79,11 +79,34 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <form method="post" th:action="'/admin/userlist/delete/' + ${category.id}">
+                <form method="post" th:action="'/admin/category/delete/' + ${category.id}">
                     <button type="submit" class="btn btn-danger" data-toggle="modal">Xóa</button>
                 </form>
             </div>
         </div>
+    </div>
+</div>
+<div class="modal fade" th:each="category:${categories}" th:attr="id='editModel'+${category.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" th:action="'/admin/category/edit/' + ${category.id}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Xác nhận</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label> Tên phân loại:
+                        <input name="name" th:value="${category.name}">
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-success" data-toggle="modal">Sửa</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 </body>

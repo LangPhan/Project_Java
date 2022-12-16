@@ -11,6 +11,7 @@ import com.services.PriceService;
 import com.services.ProductService;
 import com.utils.UploadFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -61,7 +62,14 @@ public class AdminController {
         model.addAttribute("accountList",accounts);
         return "admin/users";
     }
-
+    @GetMapping("/user/search")
+    public String getSearch(Model model,
+                            @RequestParam(name = "keyword") String keyword){
+        List<Account> accounts = accountService.search(keyword);
+        model.addAttribute("accountList", accounts);
+        model.addAttribute("keyword", keyword);
+        return "admin/users";
+    }
     @GetMapping("/user/edit/{id}")
     public ModelAndView gettingEdit(@PathVariable(name= "id") int id){
         ModelAndView mav = new ModelAndView("admin/edit-user");
@@ -104,18 +112,25 @@ public class AdminController {
         categoryService.saveCategory(category);
         return "redirect:/admin/category";
     }
-
-    @GetMapping("/product/paging/{pageNum}")
-    public String viewProductsByPaging(Model model,
-                                       @PathVariable(name = "pageNum") int pageNum){
-        Page<Product> products = productService.pageProducts(pageNum);
-
-        model.addAttribute("size", products.getSize());
-        model.addAttribute("totalPages", products.getTotalPages());
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("productsList", products); // next bc of thymeleaf we make the index.html
-
-        return "admin/productsPaging";
+    @PostMapping("/category/edit/{id}")
+    public String editCategory(@PathVariable Long id, @RequestParam(name = "name") String name){
+        Category category = categoryService.findById(id).get();
+        category.setName(name);
+        categoryService.saveCategory(category);
+        return "redirect:/admin/category";
+    }
+    @PostMapping("/category/delete/{id}")
+    public String deleteCategory(@PathVariable Long id){
+        categoryService.deleteCategory(id);
+        return "redirect:/admin/category";
+    }
+    @GetMapping("/product/search")
+    public String getSearchKeyWord(Model model,
+                            @RequestParam(name = "keyword") String keyword){
+        List<Product> products = productService.searchProductByKeyword(keyword);
+        model.addAttribute("products", products);
+        model.addAttribute("keyword", keyword);
+        return "admin/products";
     }
 
     @GetMapping("/product/pagingandsort/{pageNum}")
@@ -143,20 +158,6 @@ public class AdminController {
     public String viewHomePage(Model model) {
         return "redirect:/admin/product/pagingandsort/0?sortField=name&sortDir=asc";
     }
-/*    @GetMapping("/product/searching/{pageNum}")
-    public String searchProducts(Model model,
-                                       @RequestParam("keyword") String keyword,
-                                       @PathVariable(name = "pageNum") int pageNum){
-        Page<Product> products = productService.searchProduct(pageNum,keyword);
-
-        model.addAttribute("size", products.getSize());
-        model.addAttribute("totalPages", products.getTotalPages());
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("productsList", products); // next bc of thymeleaf we make the index.html
-        model.addAttribute("keyword", keyword);
-        return "admin/productsPaging";
-    }*/
-
 
     @GetMapping("product/add")
     public String gettingAddProduct(Model model){
@@ -214,7 +215,8 @@ public class AdminController {
                                      @RequestParam(name = "priceS") Double priceS,
                                      @RequestParam(name = "priceM") Double priceM,
                                      @RequestParam(name = "priceL") Double priceL,
-                                     @RequestParam(name = "image", defaultValue = "") MultipartFile multipartFile) throws IOException{
+                                     @RequestParam(name = "image", defaultValue = "") MultipartFile multipartFile,
+                                     Model model) throws IOException{
 
         String filename = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         if(!filename.isEmpty()){
@@ -233,6 +235,7 @@ public class AdminController {
             product.setPrice(price.get());
         }
         productService.saveProduct(product);
+        model.addAttribute("message","Chỉnh sửa sản phẩm thành công");
        return "redirect:/admin/product";
     }
     @PostMapping("product/delete/{id}")

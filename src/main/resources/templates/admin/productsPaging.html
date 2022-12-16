@@ -30,10 +30,10 @@
 <!--    <div><p th:text="${sortField} ${sortDir}"></p></div>-->
         <h1>Danh sách sản phẩm</h1>
         <h4>Thêm sản phẩm mới <a href="/admin/product/add">tại đây</a></h4>
-         <form action="/admin/product/pagingandsort/0" method="get">
+         <form action="/admin/product/search" method="get">
              <input type="hidden" name="sortField" value="name">
              <input type="hidden" name="sortDir" value="asc">
-            Filter: <input type="text" name="keyword" id="keyword" size="50" />
+            Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}"  />
             &nbsp;
             <input type="submit" value="Search" />
             &nbsp;
@@ -54,7 +54,7 @@
             <tbody>
             <tr th:each="product, iStat:${productsList}">
                 <th scope="row" th:text="${iStat.count}">1</th>
-                <td th:text="${product.name}">1</td>
+                <td ><a th:text="${product.name}" th:href="@{'/admin/product/detail/' + ${product.id}}"></a></td>
 <!--                <td th:text="${product.getImg()}">-->
                 <td>
 
@@ -63,7 +63,7 @@
                 </td>
                 <td th:text="${product.getCreatedAt()}">1</td>
                 <td th:text="${product.getUpdateAt()}">1</td>
-                <td><button type="button" class="btn btn-success"><a th:href="@{'/admin/product/detail/' + ${product.id}}">Chi tiết</a></button>
+                <td>
                     <button type="button" class="btn btn-warning"><a th:href="@{'/admin/product/edit/' + ${product.id}}">Chỉnh sửa</a></button>
                     <button type="button" class="btn btn-danger" data-toggle="modal" th:attr="data-target='#accountModel'+${product.id}" ><a>Xóa</a></button>
                 </td>
@@ -145,7 +145,7 @@
 
 <script type="text/javascript">
     function clearSearch() {
-        window.location = "/admin/product";
+        window.location = "/admin/product/pagingandsort/0?sortField=name&sortDir=asc";
     }
 </script>
 </html>

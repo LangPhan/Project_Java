@@ -21,13 +21,16 @@ public class CategoryService {
     public Optional<Category> getCategoryById(Long id){
         return categoryRepository.findById(id);
     }
+    public void deleteCategory(Long id){
+        categoryRepository.deleteById(id);
+    }
     public List<Category> getAllCategories(){
         if(categoryRepository != null){
             return categoryRepository.findAll();
         }
         return null;
     }
-    public Optional<Category> findCategoryByName(String name){
-        return categoryRepository.findCategoriesByName(name);
+    public Optional<Category> findById(Long id){
+        return categoryRepository.findById(id);
     }
 }
