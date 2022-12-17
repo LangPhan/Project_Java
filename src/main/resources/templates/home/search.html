@@ -55,6 +55,7 @@
                  th:text="${account.get().username.toUpperCase()}"></a>
           <div class="dropdown-menu" style="">
             <a class="dropdown-item" th:href="@{'/user/update-info/'+${account.get().id}+'?view=true'}">Tài khoản</a>
+            <a class="dropdown-item" href="/user/changepassword">Đổi mật khẩu</a>
             <a class="dropdown-item" href="/cart/history">Lịch sử mua hàng</a>
             <div class="dropdown-divider"></div>
             <a th:if="${account.get().getRole()=='ROLE_ADMIN'}" class="dropdown-item" href="/admin" style="color: green">Quản lý</a>

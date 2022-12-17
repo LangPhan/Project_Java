@@ -82,6 +82,25 @@ public class CartController {
 
         return "redirect:/cart";
     }
+    @PostMapping("/delete/{id}")
+    public String postDeleteItem(@PathVariable Long id){
+        CartItem cartItem = cartItemService.findCardItemById(id).get();
+        cartItem.setCart(null);
+        cartItem.setProduct(null);
+        cartItemService.save(cartItem);
+        cartItemService.delete(cartItem);
+        return "redirect:/cart";
+    }
+    @PostMapping("/edit/{id}")
+    public String putEditItemCart(@PathVariable Long id, @RequestParam(name = "price") Double price,
+                                  @RequestParam(name = "quantity") int quantity){
+        CartItem cartItem = cartItemService.findCardItemById(id).get();
+        cartItem.setPrice(price);
+        cartItem.setQuantity(quantity);
+        cartItemService.save(cartItem);
+        return "redirect:/cart";
+    }
+
     @PostMapping("/pay/{id}")
     public String postPayment(@PathVariable Long id,
                               @CookieValue(value = "username", defaultValue = "") String username,
@@ -127,22 +146,5 @@ public class CartController {
         model.addAttribute("cart",cart);
         return "home/history";
     }
-    @PostMapping("/delete/{id}")
-    public String postDeleteItem(@PathVariable Long id){
-        CartItem cartItem = cartItemService.findCardItemById(id).get();
-        cartItem.setCart(null);
-        cartItem.setProduct(null);
-        cartItemService.save(cartItem);
-        cartItemService.delete(cartItem);
-        return "redirect:/cart";
-    }
-    @PostMapping("/edit/{id}")
-    public String putEditItemCart(@PathVariable Long id, @RequestParam(name = "price") Double price,
-                                  @RequestParam(name = "quantity") int quantity){
-        CartItem cartItem = cartItemService.findCardItemById(id).get();
-        cartItem.setPrice(price);
-        cartItem.setQuantity(quantity);
-        cartItemService.save(cartItem);
-        return "redirect:/cart";
-    }
+
 }

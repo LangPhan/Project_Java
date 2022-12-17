@@ -31,9 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/","/user/**","/js/**", "/css/**").permitAll();
         http.authorizeRequests().antMatchers("/admin/**").access("hasAuthority('ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/employees/**").access("hasAnyAuthority('ROLE_ADMIN','ROLE_EMPLOYEE')");
-        http.authorizeRequests().antMatchers("/cart/**").access("hasAnyAuthority('ROLE_ADMIN','ROLE_EMPLOYEE','ROLE_USER')").and().exceptionHandling().accessDeniedPage("/no-login");
-       /* http.authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER");*/
-        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/user/404");
+        http.authorizeRequests().antMatchers("/cart/**").access("hasAnyAuthority('ROLE_ADMIN','ROLE_EMPLOYEE','ROLE_USER')");
+        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/no-login");
         http.authorizeRequests().and().formLogin()
                 .loginProcessingUrl("/j_spring_security_check")
                 .loginPage("/user/login")

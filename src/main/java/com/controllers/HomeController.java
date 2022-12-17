@@ -22,13 +22,9 @@ public class HomeController {
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
-    private AccountService accountService;
-    @Autowired
     private CategoryService categoryService;
     @Autowired
     private ProductService productService;
-    @Autowired
-    private PriceService priceService;
 
     @GetMapping("")
     public String getHome(@CookieValue(value = "username", defaultValue = "") String username, Model model){
@@ -40,7 +36,7 @@ public class HomeController {
                 return "redirect:/admin";
             }
             if (accountSaved.get().getRole().equals("ROLE_EMPLOYEE")) {
-                return "redirect:/employee";
+                return "redirect:/employees";
             }
         }
         if(!Objects.equals(username, "")){
@@ -114,4 +110,5 @@ public class HomeController {
     public String handleNoLogin(){
         return "home/404";
     }
+
 }

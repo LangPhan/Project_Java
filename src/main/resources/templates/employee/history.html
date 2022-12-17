@@ -18,6 +18,9 @@
     <li class="nav-item active">
       <a class="nav-link" href="/employees/history">Lịch sử giao dịch hôm nay</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/user/logout">Đăng xuất</a>
+    </li>
   </ul>
 </nav>
 <div align="center">
@@ -53,7 +56,6 @@
       <th colspan="4"></th>
       <th>
         <form method="post" th:action="'/employees/delivered/' + ${user.id}">
-          <button type="submit" class="btn btn-success">Đã giao</button>
         </form>
       </th>
     </tr>

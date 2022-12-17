@@ -33,7 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("admin")
 public class AdminController {
 
     @Autowired
@@ -124,6 +124,8 @@ public class AdminController {
         categoryService.deleteCategory(id);
         return "redirect:/admin/category";
     }
+
+    //PRODUCT MANAGEMENT
     @GetMapping("/product/search")
     public String getSearchKeyWord(Model model,
                             @RequestParam(name = "keyword") String keyword){
@@ -249,6 +251,5 @@ public class AdminController {
         }
         return viewHomePage(model);
     }
-
 
 }

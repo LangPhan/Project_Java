@@ -29,23 +29,14 @@ public class AccountController {
     private AccountRepository accountRepository;
     @Autowired
     private UserService userService;
-
     @Autowired
     private SendEmail sendEmail;
 
-    /*private List<String> getRolesByLoggedUser(Principal principal){
-        String roles = getLoggedUser(principal).getRole();
-        List<String> assignRoles = Arrays.stream(roles.split(",")).toList();
-        if(assignRoles.contains("ROLE_ADMIN")){
-            return Arrays.stream(UserConstant.ADMIN_ACCESS).collect(Collectors.toList());
-        }
-        return Collections.emptyList();
-    }*/
 
     private Account getLoggedUser(Principal principal){
         return accountRepository.findByUsername(principal.getName()).get();
     }
-
+    //REGISTER
     @GetMapping("/register")
     public String getRegister(Model model){
         Account account = new Account();
@@ -84,6 +75,8 @@ public class AccountController {
         model.addAttribute("notify", notify);
         return "users/login";
     }
+
+    //UPDATE INFO
     @GetMapping("/update-info/{id}")
     public String getUpdateInfo(Model model, @PathVariable String id,
                                 @CookieValue(value = "username", defaultValue = "") String username){
@@ -159,6 +152,8 @@ public class AccountController {
             accountRepository.save(account.get());
         return "redirect:/";
     }
+
+    //LOGIN
     @GetMapping("/login")
     public String getLogin(Model model,
                            @CookieValue(name = "pass", defaultValue = "") String pass,
@@ -202,6 +197,7 @@ public class AccountController {
             }
         }
     }
+    //RESET PASSWORD
     @GetMapping("/resetpassword")
     public String getForgotPassword(){
         return "users/resetpassword";
@@ -231,6 +227,7 @@ public class AccountController {
         response.addCookie(acc);
         return "users/confirm";
     }
+    //RENEW PASS
     @GetMapping("/typecode")
     public String getTypeCode(@ModelAttribute(name = "message") String message,
                               @ModelAttribute(name = "account") Account account, Model model){
@@ -272,21 +269,39 @@ public class AccountController {
         model.addAttribute("notify","Phục hồi tài khoản thành công");
         return getLogin(model, password, username);
     }
-    @GetMapping("/admin")
-    public String getAdmin(){
-        return "users/admin";
+    //CHANGE PASS
+    @GetMapping("/changepassword")
+    public String getChangePw(){
+        return "users/changepw";
     }
-    @GetMapping("/admin/edit")
-    public String getAdminEdit(){
-        return "users/admin";
-    }
-    @GetMapping("/404")
-    public String getError(){
-        return "users/404";
-    }
-    @GetMapping()
-    public String getIndex(){
-        return "home/index";
+    @PostMapping("/changepassword")
+    public String postChangepw(@CookieValue(name = "username", defaultValue = "") String username,
+                                @RequestParam(name = "password") String password,
+                                @RequestParam(name = "new-password") String newPassword,
+                                @RequestParam(name="re-password") String rePassword,
+                                Model model){
+        Optional<Account> account = accountRepository.findByUsername(username);
+        if(account.isPresent()){
+            if(!passwordEncoder.matches(password,account.get().getPassword())){
+                model.addAttribute("message", "Mật khẩu chưa chính xác");
+                return "users/changepw";
+            }
+        }
+        if(newPassword.length() < 8){
+            model.addAttribute("message", "Mật khẩu mới phải có ít nhất 8 kí tự");
+            return "users/changepw";
+        }
+        if(!newPassword.equals(rePassword)){
+            model.addAttribute("message","Mật khẩu mới không khớp");
+            return "users/changepw";
+        }
+        account.get().setPassword(passwordEncoder.encode(newPassword));
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        account.get().setUpdateAt(dateFormat.format(date));
+        accountRepository.save(account.get());
+        model.addAttribute("notify","Đổi mật khẩu thành công");
+        return getLogin(model, password, username);
     }
 
 }
